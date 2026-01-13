@@ -1,7 +1,7 @@
 // ===============================
 // Koordinat Politeknik Ungku Omar
 // ===============================
-var puoLatLng = [4.5975, 101.0901];
+var puoLatLng = [4.588556, 101.126056];
 
 // ===============================
 // Initialize Map (AUTO FOCUS PUO)
@@ -132,4 +132,5 @@ legend.onAdd = function () {
 };
 
 legend.addTo(map);
+
 
