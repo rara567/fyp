@@ -9,10 +9,10 @@ var puoLatLng = [4.5886, 101.1261];
 var map = L.map('map', {
   center: puoLatLng,
   zoom: 18,
-  maxZoom: 22,          // zoom maksimum Leaflet
+  maxZoom: 22,
   minZoom: 5,
-  touchZoom: true,
   scrollWheelZoom: true,
+  touchZoom: true,
   doubleClickZoom: true
 });
 
@@ -21,49 +21,48 @@ var map = L.map('map', {
 // ===============================
 var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   attribution: '© OpenStreetMap Contributors',
-  maxZoom: 22,        // max zoom di Leaflet
-  maxNativeZoom: 19   // max tile sebenar tersedia
+  maxZoom: 22,
+  maxNativeZoom: 19
 }).addTo(map);
 
 // ===============================
 // Marker PUO
 // ===============================
-L.marker(puoLatLng)
-  .addTo(map)
-  .bindPopup("<b>Politeknik Ungku Omar</b><br>Ipoh, Perak")
-  .openPopup();
+var puoMarker = L.marker(puoLatLng, {
+  icon: L.icon({
+    iconUrl: 'icons/puo.png', // ikon khas PUO
+    iconSize: [40, 40]
+  })
+}).addTo(map).bindPopup("<b>Politeknik Ungku Omar</b><br>Ipoh, Perak").openPopup();
 
 // ===============================
-// Bangunan Layer (Polygon)
+// Layer Bangunan
 // ===============================
 var bangunanLayer = L.geoJSON(null, {
-  style: {
-    color: "#0b5ed7",
-    weight: 2,
-    fillColor: "#0b5ed7",
-    fillOpacity: 0.5
-  },
-  onEachFeature: function (feature, layer) {
-    layer.bindPopup("<b>" + (feature.properties.nama || "Bangunan") + "</b><br>" +
-                    (feature.properties.keterangan || ""));
-    layer.on('click', function () {
-      map.fitBounds(layer.getBounds());
-    });
+  style: { color: "#0b5ed7", weight: 2, fillColor: "#0b5ed7", fillOpacity: 0.5 },
+  onEachFeature: function(feature, layer) {
+    var popupContent = "<b>" + feature.properties.nama + "</b><br>";
+    if(feature.properties.gambar) popupContent += "<img src='" + feature.properties.gambar + "' width='150'><br>";
+    if(feature.properties.keterangan) popupContent += feature.properties.keterangan;
+    layer.bindPopup(popupContent);
+    layer.on('click', function() { map.fitBounds(layer.getBounds()); });
   }
 });
 
 // ===============================
-// Fasiliti Layer (Point)
+// Layer Fasiliti
 // ===============================
 var fasilitiLayer = L.geoJSON(null, {
-  pointToLayer: function (feature, latlng) {
+  pointToLayer: function(feature, latlng) {
+    var iconColor = "#198754";
+    if(feature.properties.kategori === "Kedai") iconColor = "#ffc107";
     return L.circleMarker(latlng, {
-      radius: 6,
-      fillColor: "#198754",
+      radius: 8,
+      fillColor: iconColor,
       color: "#000",
       weight: 1,
-      fillOpacity: 0.8
-    }).bindPopup("<b>" + feature.properties.nama + "</b>");
+      fillOpacity: 0.9
+    }).bindPopup("<b>" + feature.properties.nama + "</b><br>" + (feature.properties.keterangan || ""));
   }
 });
 
@@ -79,15 +78,28 @@ fetch('data/fasiliti.geojson')
   .then(data => fasilitiLayer.addData(data).addTo(map));
 
 // ===============================
-// Layer Control
+// Layer Control & Legend Interaktif
 // ===============================
-L.control.layers(null, {
+var overlayMaps = {
   "Bangunan Kampus": bangunanLayer,
   "Fasiliti": fasilitiLayer
-}, { collapsed: false }).addTo(map);
+};
+L.control.layers(null, overlayMaps, { collapsed: false }).addTo(map);
+
+var legend = L.control({ position: 'bottomright' });
+legend.onAdd = function() {
+  var div = L.DomUtil.create('div', 'legend');
+  div.innerHTML = "<b>Legenda</b><br>";
+  div.innerHTML += '<i style="background:#0b5ed7"></i> Bangunan<br>';
+  div.innerHTML += '<i style="background:#198754"></i> Fasiliti<br>';
+  div.innerHTML += '<i style="background:#ffc107"></i> Kedai<br>';
+  div.innerHTML += '<i style="background:#136aec"></i> Lokasi Pengguna<br>';
+  return div;
+};
+legend.addTo(map);
 
 // ===============================
-// Measure Tool
+// Measure Tool & Scale Bar
 // ===============================
 L.control.measure({
   primaryLengthUnit: 'meters',
@@ -95,118 +107,74 @@ L.control.measure({
   primaryAreaUnit: 'sqmeters',
   secondaryAreaUnit: 'hectares'
 }).addTo(map);
-
-// ===============================
-// Scale Bar
-// ===============================
 L.control.scale().addTo(map);
 
 // ===============================
-// Search (Global)
+// Search Auto-suggest
 // ===============================
 var searchMarker;
-
+var searchLayer = L.layerGroup([bangunanLayer, fasilitiLayer]).addTo(map);
 L.Control.geocoder({
   defaultMarkGeocode: false,
-  placeholder: 'Cari lokasi'
-})
-.on('markgeocode', function(e) {
+  placeholder: 'Cari lokasi...'
+}).on('markgeocode', function(e){
   var center = e.geocode.center;
-
-  if (searchMarker) map.removeLayer(searchMarker);
-
-  // Gunakan zoom ≤19 supaya tile ada
-  map.flyTo(center, 19, { duration: 1.5 });
-
-  searchMarker = L.marker(center)
-    .addTo(map)
-    .bindPopup(e.geocode.name)
-    .openPopup();
-})
-.addTo(map);
+  if(searchMarker) map.removeLayer(searchMarker);
+  map.flyTo(center, 19);
+  searchMarker = L.marker(center).addTo(map)
+                 .bindPopup(e.geocode.name).openPopup();
+}).addTo(map);
 
 // ===============================
-// Legend
-// ===============================
-var legend = L.control({ position: 'bottomright' });
-
-legend.onAdd = function () {
-  var div = L.DomUtil.create('div', 'legend');
-  div.innerHTML += "<b>Legenda</b><br>";
-  div.innerHTML += '<i style="background:#0b5ed7"></i> Bangunan<br>';
-  div.innerHTML += '<i style="background:#198754"></i> Fasiliti<br>';
-  div.innerHTML += '<i style="background:#136aec"></i> Lokasi Pengguna<br>';
-  return div;
-};
-legend.addTo(map);
-
-// ===============================
-// USER LOCATION TRACKING
+// User Location Tracking
 // ===============================
 var userMarker, accuracyCircle;
-var followUser = true; // toggle live tracking
+var followUser = true;
 
 function onLocationFound(e) {
   var latlng = e.latlng;
   var radius = e.accuracy;
+  if(radius > 30) radius = 30; // hadkan radius
 
-  // Hadkan radius maksimum supaya bulatan biru tidak terlalu besar
-  if (radius > 30) radius = 30;
+  if(!userMarker){
+    userMarker = L.marker(latlng, {
+      icon: L.icon({ iconUrl: 'icons/user.png', iconSize: [30,30] })
+    }).addTo(map).bindPopup("📍 Lokasi Anda");
+  } else userMarker.setLatLng(latlng);
 
-  if (!userMarker) {
-    userMarker = L.marker(latlng).addTo(map).bindPopup("📍 Lokasi Anda");
-  } else {
-    userMarker.setLatLng(latlng);
-  }
-
-  if (!accuracyCircle) {
+  if(!accuracyCircle){
     accuracyCircle = L.circle(latlng, {
       radius: radius,
       color: '#136aec',
       fillColor: '#136aec',
       fillOpacity: 0.2
     }).addTo(map);
-  } else {
-    accuracyCircle.setLatLng(latlng).setRadius(radius);
-  }
+  } else accuracyCircle.setLatLng(latlng).setRadius(radius);
 
-  // Auto zoom hanya jika followUser = true
-  if (followUser) {
-    map.flyTo(latlng, 19, { animate: true, duration: 1.2 });
-  }
+  if(followUser) map.flyTo(latlng, 19, { animate: true, duration: 1.2 });
 }
 
-function onLocationError(e) {
+function onLocationError(e){
   alert("Sila benarkan akses lokasi untuk menggunakan fungsi ini.");
 }
 
-// Aktifkan live tracking
-map.locate({
-  watch: true,
-  setView: false,
-  maxZoom: 19, // jangan melebihi tile OSM
-  enableHighAccuracy: true
-});
+map.locate({ watch:true, setView:false, maxZoom:19, enableHighAccuracy:true });
 map.on('locationfound', onLocationFound);
 map.on('locationerror', onLocationError);
 
 // ===============================
-// Butang Fokus PUO
+// Butang Fokus & Toggle Live Tracking
 // ===============================
-if (L.easyButton) {
-  L.easyButton('fa-university', function(btn, map){
+if(L.easyButton){
+  // Fokus PUO
+  L.easyButton('fa-university', function(btn,map){
     map.flyTo(puoLatLng, 19);
   }, 'Fokus ke PUO').addTo(map);
 
-  // Butang toggle live tracking
-  L.easyButton('fa-location-arrow', function(btn, map){
+  // Toggle Live Tracking
+  L.easyButton('fa-location-arrow', function(btn,map){
     followUser = !followUser;
-    if(followUser && userMarker) {
-      map.flyTo(userMarker.getLatLng(), 19);
-      alert("Live tracking dihidupkan");
-    } else {
-      alert("Live tracking dimatikan");
-    }
+    if(followUser && userMarker) map.flyTo(userMarker.getLatLng(), 19);
   }, 'Toggle Live Tracking').addTo(map);
 }
 
