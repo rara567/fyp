@@ -1,71 +1,70 @@
-
 // ===============================
 // Koordinat PUO
 // ===============================
 var puoLatLng = [4.5886, 101.1261];
 
 // ===============================
+// Basemap Layers
+// ===============================
+var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap Contributors',
+    maxZoom: 22,
+    maxNativeZoom: 19
+});
+
+var satellite = L.tileLayer('https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
+    maxZoom: 22,
+    subdomains:['mt0','mt1','mt2','mt3'],
+    attribution: '© Google Satellite'
+});
+
+// ===============================
 // Initialize Map
 // ===============================
 var map = L.map('map', {
-  center: puoLatLng,
-  zoom: 18,
-  maxZoom: 22,
-  minZoom: 5,
-  scrollWheelZoom: true,
-  touchZoom: true,
-  doubleClickZoom: true
+    center: puoLatLng,
+    zoom: 18,
+    maxZoom: 22,
+    minZoom: 5,
+    scrollWheelZoom: true,
+    touchZoom: true,
+    doubleClickZoom: true,
+    layers: [osm] // Default basemap
 });
 
 // ===============================
-// Basemap
+// Layer Switcher
 // ===============================
-var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  attribution: '© OpenStreetMap Contributors',
-  maxZoom: 22,
-  maxNativeZoom: 19
-}).addTo(map);
+var baseMaps = {
+    "OpenStreetMap": osm,
+    "Satelit": satellite
+};
 
-// ===============================
-// Marker PUO
-// ===============================
-var puoMarker = L.marker(puoLatLng, {
-  icon: L.icon({
-    iconUrl: 'icons/user.png', // pastikan fail marker.png ada dalam folder icons/
-    iconSize: [40, 40]
-  })
-}).addTo(map).bindPopup("<b>Politeknik Ungku Omar</b><br>Ipoh, Perak").openPopup();
-
-// ===============================
-// Layer Bangunan
-// ===============================
+// Overlay layers
 var bangunanLayer = L.geoJSON(null, {
-  style: { color: "#0b5ed7", weight: 2, fillColor: "#0b5ed7", fillOpacity: 0.5 },
-  onEachFeature: function(feature, layer) {
-    var popupContent = "<b>" + feature.properties.nama + "</b><br>";
-    if(feature.properties.gambar) popupContent += "<img src='" + feature.properties.gambar + "' width='150' style='border-radius:5px'><br>";
-    if(feature.properties.keterangan) popupContent += feature.properties.keterangan;
-    layer.bindPopup(popupContent);
-    layer.on('click', function() { map.fitBounds(layer.getBounds()); });
-  }
+    style: { color: "#0b5ed7", weight: 2, fillColor: "#0b5ed7", fillOpacity: 0.5 },
+    onEachFeature: function(feature, layer) {
+        var popupContent = "<b>" + feature.properties.nama + "</b><br>";
+        if(feature.properties.gambar) popupContent += "<img src='" + feature.properties.gambar + "' width='150' style='border-radius:5px'><br>";
+        if(feature.properties.keterangan) popupContent += feature.properties.keterangan;
+        layer.bindPopup(popupContent);
+        layer.on('click', function() { map.fitBounds(layer.getBounds()); });
+    }
 });
 
-// ===============================
-// Layer Fasiliti
-// ===============================
 var fasilitiLayer = L.geoJSON(null, {
-  pointToLayer: function(feature, latlng) {
-    var iconColor = "#198754"; // default hijau
-    if(feature.properties.kategori === "Kedai") iconColor = "#ffc107"; // kuning
-    if(feature.properties.kategori === "Ruang Rekreasi") iconColor = "#dc3545"; // merah
-    return L.circleMarker(latlng, {
-      radius: 8,
-      fillColor: iconColor,
-      color: "#000",
-      weight: 1,
-      fillOpacity: 0.9
-    }).bindPopup("<b>" + feature.properties.nama + "</b><br>" + (feature.properties.keterangan || ""));
-  }
+    pointToLayer: function(feature, latlng) {
+        var iconColor = "#198754"; // default hijau
+        if(feature.properties.kategori === "Kedai") iconColor = "#ffc107"; // kuning
+        if(feature.properties.kategori === "Ruang Rekreasi") iconColor = "#dc3545"; // merah
+        return L.circleMarker(latlng, {
+            radius: 8,
+            fillColor: iconColor,
+            color: "#000",
+            weight: 1,
+            fillOpacity: 0.9
+        }).bindPopup("<b>" + feature.properties.nama + "</b><br>" + (feature.properties.keterangan || ""));
+    }
 });
 
 // ===============================
@@ -80,26 +79,48 @@ fetch('data/fasiliti.geojson')
   .then(data => fasilitiLayer.addData(data).addTo(map));
 
 // ===============================
-// Layer Control & Legend
+// Overlay Control
 // ===============================
 var overlayMaps = {
-  "Bangunan Kampus": bangunanLayer,
-  "Fasiliti": fasilitiLayer
+    "Bangunan Kampus": bangunanLayer,
+    "Fasiliti": fasilitiLayer
 };
-L.control.layers(null, overlayMaps, { collapsed: false }).addTo(map);
 
+L.control.layers(baseMaps, overlayMaps, { collapsed: false }).addTo(map);
+
+// ===============================
+// Legend
+// ===============================
 var legend = L.control({ position: 'bottomright' });
 legend.onAdd = function() {
-  var div = L.DomUtil.create('div', 'legend');
-  div.innerHTML = "<b>Legenda</b><br>";
-  div.innerHTML += '<i style="background:#0b5ed7"></i> Bangunan<br>';
-  div.innerHTML += '<i style="background:#198754"></i> Fasiliti<br>';
-  div.innerHTML += '<i style="background:#ffc107"></i> Kedai<br>';
-  div.innerHTML += '<i style="background:#dc3545"></i> Ruang Rekreasi<br>';
-  div.innerHTML += '<i style="background:#136aec"></i> Lokasi Pengguna<br>';
-  return div;
+    var div = L.DomUtil.create('div', 'legend');
+    div.innerHTML = "<b>Legenda</b><br>";
+    div.innerHTML += '<i style="background:#0b5ed7"></i> Bangunan<br>';
+    div.innerHTML += '<i style="background:#198754"></i> Fasiliti<br>';
+    div.innerHTML += '<i style="background:#ffc107"></i> Kedai<br>';
+    div.innerHTML += '<i style="background:#dc3545"></i> Ruang Rekreasi<br>';
+    div.innerHTML += '<i style="background:#136aec"></i> Lokasi Pengguna<br>';
+    return div;
 };
 legend.addTo(map);
+
+// ===============================
+// Custom Icon PUO
+// ===============================
+var puoIcon = L.icon({
+    iconUrl: 'icons/puo.png',
+    iconSize: [50, 50],
+    iconAnchor: [25, 50],
+    popupAnchor: [0, -50]
+});
+
+// ===============================
+// Marker PUO
+// ===============================
+var puoMarker = L.marker(puoLatLng, {icon: puoIcon})
+  .addTo(map)
+  .bindPopup("<b>Politeknik Ungku Omar</b><br>Ipoh, Perak")
+  .openPopup();
 
 // ===============================
 // Measure & Scale
@@ -136,11 +157,11 @@ var followUser = true;
 function onLocationFound(e) {
   var latlng = e.latlng;
   var radius = e.accuracy;
-  if(radius > 30) radius = 30; // hadkan radius bulatan
+  if(radius > 30) radius = 30;
 
   if(!userMarker){
     userMarker = L.marker(latlng, {
-      icon: L.icon({ iconUrl: 'icons/user.png', iconSize: [30,30] }) // pastikan fail user.png ada dalam folder icons/
+      icon: L.icon({ iconUrl: 'icons/user.png', iconSize: [30,30] })
     }).addTo(map).bindPopup("📍 Lokasi Anda");
   } else userMarker.setLatLng(latlng);
 
@@ -165,7 +186,7 @@ map.on('locationfound', onLocationFound);
 map.on('locationerror', onLocationError);
 
 // ===============================
-// Butang Fokus & Toggle Live Tracking
+// Easy Buttons
 // ===============================
 if(L.easyButton){
   L.easyButton('fa-university', function(btn,map){
@@ -177,6 +198,4 @@ if(L.easyButton){
     if(followUser && userMarker) map.flyTo(userMarker.getLatLng(), 19);
   }, 'Toggle Live Tracking').addTo(map);
 }
-
-
 
