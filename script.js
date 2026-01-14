@@ -30,7 +30,7 @@ var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 // ===============================
 var puoMarker = L.marker(puoLatLng, {
   icon: L.icon({
-    iconUrl: 'icons/puo.png', // ikon khas PUO
+    iconUrl: 'icons/puo.png',
     iconSize: [40, 40]
   })
 }).addTo(map).bindPopup("<b>Politeknik Ungku Omar</b><br>Ipoh, Perak").openPopup();
@@ -42,7 +42,7 @@ var bangunanLayer = L.geoJSON(null, {
   style: { color: "#0b5ed7", weight: 2, fillColor: "#0b5ed7", fillOpacity: 0.5 },
   onEachFeature: function(feature, layer) {
     var popupContent = "<b>" + feature.properties.nama + "</b><br>";
-    if(feature.properties.gambar) popupContent += "<img src='" + feature.properties.gambar + "' width='150'><br>";
+    if(feature.properties.gambar) popupContent += "<img src='" + feature.properties.gambar + "' width='150' style='border-radius:5px'><br>";
     if(feature.properties.keterangan) popupContent += feature.properties.keterangan;
     layer.bindPopup(popupContent);
     layer.on('click', function() { map.fitBounds(layer.getBounds()); });
@@ -54,8 +54,9 @@ var bangunanLayer = L.geoJSON(null, {
 // ===============================
 var fasilitiLayer = L.geoJSON(null, {
   pointToLayer: function(feature, latlng) {
-    var iconColor = "#198754";
-    if(feature.properties.kategori === "Kedai") iconColor = "#ffc107";
+    var iconColor = "#198754"; // default hijau
+    if(feature.properties.kategori === "Kedai") iconColor = "#ffc107"; // kuning
+    if(feature.properties.kategori === "Ruang Rekreasi") iconColor = "#dc3545"; // merah
     return L.circleMarker(latlng, {
       radius: 8,
       fillColor: iconColor,
@@ -67,7 +68,7 @@ var fasilitiLayer = L.geoJSON(null, {
 });
 
 // ===============================
-// Load GeoJSON Data
+// Load GeoJSON
 // ===============================
 fetch('data/bangunan.geojson')
   .then(res => res.json())
@@ -78,7 +79,7 @@ fetch('data/fasiliti.geojson')
   .then(data => fasilitiLayer.addData(data).addTo(map));
 
 // ===============================
-// Layer Control & Legend Interaktif
+// Layer Control & Legend
 // ===============================
 var overlayMaps = {
   "Bangunan Kampus": bangunanLayer,
@@ -93,13 +94,14 @@ legend.onAdd = function() {
   div.innerHTML += '<i style="background:#0b5ed7"></i> Bangunan<br>';
   div.innerHTML += '<i style="background:#198754"></i> Fasiliti<br>';
   div.innerHTML += '<i style="background:#ffc107"></i> Kedai<br>';
+  div.innerHTML += '<i style="background:#dc3545"></i> Ruang Rekreasi<br>';
   div.innerHTML += '<i style="background:#136aec"></i> Lokasi Pengguna<br>';
   return div;
 };
 legend.addTo(map);
 
 // ===============================
-// Measure Tool & Scale Bar
+// Measure & Scale
 // ===============================
 L.control.measure({
   primaryLengthUnit: 'meters',
@@ -110,10 +112,9 @@ L.control.measure({
 L.control.scale().addTo(map);
 
 // ===============================
-// Search Auto-suggest
+// Search
 // ===============================
 var searchMarker;
-var searchLayer = L.layerGroup([bangunanLayer, fasilitiLayer]).addTo(map);
 L.Control.geocoder({
   defaultMarkGeocode: false,
   placeholder: 'Cari lokasi...'
@@ -134,7 +135,7 @@ var followUser = true;
 function onLocationFound(e) {
   var latlng = e.latlng;
   var radius = e.accuracy;
-  if(radius > 30) radius = 30; // hadkan radius
+  if(radius > 30) radius = 30; // hadkan radius bulatan
 
   if(!userMarker){
     userMarker = L.marker(latlng, {
@@ -166,12 +167,10 @@ map.on('locationerror', onLocationError);
 // Butang Fokus & Toggle Live Tracking
 // ===============================
 if(L.easyButton){
-  // Fokus PUO
   L.easyButton('fa-university', function(btn,map){
     map.flyTo(puoLatLng, 19);
   }, 'Fokus ke PUO').addTo(map);
 
-  // Toggle Live Tracking
   L.easyButton('fa-location-arrow', function(btn,map){
     followUser = !followUser;
     if(followUser && userMarker) map.flyTo(userMarker.getLatLng(), 19);
