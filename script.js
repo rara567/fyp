@@ -9,9 +9,11 @@ var puoLatLng = [4.5886, 101.1261];
 var map = L.map('map', {
   center: puoLatLng,
   zoom: 18,
-  maxZoom: 19,
+  maxZoom: 19,       // Sesuai dengan tiles
   minZoom: 5,
-  zoomControl: false
+  zoomControl: false, 
+  zoomSnap: 0.5,     // zoom lebih smooth
+  zoomDelta: 0.5
 });
 
 // ===============================
@@ -69,7 +71,8 @@ customZoom.addTo(map);
 // Basemap
 // ===============================
 var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  attribution: '© OpenStreetMap Contributors'
+  attribution: '© OpenStreetMap Contributors',
+  maxZoom: 19
 }).addTo(map);
 
 // ===============================
