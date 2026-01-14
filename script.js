@@ -30,7 +30,7 @@ var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 // ===============================
 var puoMarker = L.marker(puoLatLng, {
   icon: L.icon({
-    iconUrl: 'icons/puo.png',
+    iconUrl: 'icons/marker.png', // pastikan fail marker.png ada dalam folder icons/
     iconSize: [40, 40]
   })
 }).addTo(map).bindPopup("<b>Politeknik Ungku Omar</b><br>Ipoh, Perak").openPopup();
@@ -139,7 +139,7 @@ function onLocationFound(e) {
 
   if(!userMarker){
     userMarker = L.marker(latlng, {
-      icon: L.icon({ iconUrl: 'icons/user.png', iconSize: [30,30] })
+      icon: L.icon({ iconUrl: 'icons/user.png', iconSize: [30,30] }) // pastikan fail user.png ada dalam folder icons/
     }).addTo(map).bindPopup("📍 Lokasi Anda");
   } else userMarker.setLatLng(latlng);
 
