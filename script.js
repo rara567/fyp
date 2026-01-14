@@ -1,3 +1,4 @@
+
 // ===============================
 // MATIKAN SEMUA MARKER LEAFLET
 // ===============================
@@ -60,11 +61,10 @@ legend.addTo(map);
 
 // ===============================
 // Measure & Scale (TIADA AUTO PAN)
-// ===============================
 L.control.measure({
     primaryLengthUnit: 'meters',
     secondaryLengthUnit: 'kilometers',
-    popupOptions: { autoPan: false }  // stop map auto terbang
+    popupOptions: { autoPan: false } // stop map auto terbang
 }).addTo(map);
 
 L.control.scale().addTo(map);
@@ -85,4 +85,3 @@ if (L.easyButton) {
         map.flyTo(puoLatLng, 18);
     }, 'Fokus Kawasan PUO').addTo(map);
 }
-
