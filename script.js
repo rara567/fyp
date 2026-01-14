@@ -30,7 +30,7 @@ var routingControl;
 var currentUserLatLng = null; // Lokasi pengguna semasa
 
 // ===============================
-// Bangunan Layer (Polygon)
+// Bangunan Layer (Polygon) dengan Routing
 // ===============================
 var bangunanLayer = L.geoJSON(null, {
   style: {
@@ -40,8 +40,6 @@ var bangunanLayer = L.geoJSON(null, {
     fillOpacity: 0.5
   },
   onEachFeature: function (feature, layer) {
-
-    // Dapatkan koordinat tengah polygon untuk routing
     var center = layer.getBounds().getCenter();
 
     layer.bindPopup(
@@ -152,15 +150,12 @@ legend.addTo(map);
 var userMarker, accuracyCircle;
 var followUser = true;
 
-// Bila lokasi dijumpai
 function onLocationFound(e) {
   var latlng = e.latlng;
   var radius = e.accuracy;
 
-  // Simpan lokasi pengguna semasa (untuk routing)
-  currentUserLatLng = latlng;
+  currentUserLatLng = latlng; // simpan lokasi untuk routing
 
-  // Marker pengguna
   if (!userMarker) {
     userMarker = L.marker(latlng).addTo(map)
       .bindPopup("📍 Lokasi Anda");
@@ -168,7 +163,6 @@ function onLocationFound(e) {
     userMarker.setLatLng(latlng);
   }
 
-  // Bulatan ketepatan GPS
   if (!accuracyCircle) {
     accuracyCircle = L.circle(latlng, {
       radius: radius,
@@ -180,7 +174,6 @@ function onLocationFound(e) {
     accuracyCircle.setLatLng(latlng).setRadius(radius);
   }
 
-  // Peta ikut pergerakan pengguna
   if (followUser) {
     map.flyTo(latlng, 18, {
       animate: true,
@@ -189,14 +182,12 @@ function onLocationFound(e) {
   }
 }
 
-// Jika lokasi gagal
 function onLocationError(e) {
   alert("Sila benarkan akses lokasi untuk menggunakan fungsi ini.");
 }
 
-// Aktifkan LIVE tracking
 map.locate({
-  watch: true,                 // 🔥 real-time
+  watch: true,
   setView: false,
   maxZoom: 18,
   enableHighAccuracy: true
@@ -214,12 +205,10 @@ function routeToDestination(destinationLatLng) {
     return;
   }
 
-  // Buang laluan lama jika ada
   if (routingControl) {
     map.removeControl(routingControl);
   }
 
-  // Buat laluan baru
   routingControl = L.Routing.control({
     waypoints: [
       currentUserLatLng,
@@ -232,7 +221,7 @@ function routeToDestination(destinationLatLng) {
     lineOptions: {
       styles: [{ color: '#dc3545', weight: 5 }]
     },
-    createMarker: function () { return null; } // buang marker laluan default
+    createMarker: function () { return null; } // hilangkan marker laluan default
   }).addTo(map);
 }
 
