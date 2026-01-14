@@ -1,4 +1,11 @@
 // ===============================
+// MATIKAN SEMUA MARKER LEAFLET
+// ===============================
+L.Marker.prototype.options.icon = L.divIcon({
+    className: 'no-marker'
+});
+
+// ===============================
 // Koordinat Pusat PUO
 // ===============================
 var puoLatLng = [4.5886, 101.1261];
@@ -13,7 +20,7 @@ var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
 var satellite = L.tileLayer('https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
     maxZoom: 22,
-    subdomains:['mt0','mt1','mt2','mt3'],
+    subdomains: ['mt0','mt1','mt2','mt3'],
     attribution: '© Google Satellite'
 });
 
@@ -22,7 +29,7 @@ var satellite = L.tileLayer('https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}'
 // ===============================
 var map = L.map('map', {
     center: puoLatLng,
-    zoom: 16,       // default zoom biasa
+    zoom: 16,
     minZoom: 5,
     maxZoom: 22,
     scrollWheelZoom: true,
@@ -41,10 +48,10 @@ var baseMaps = {
 L.control.layers(baseMaps, {}, { collapsed: false }).addTo(map);
 
 // ===============================
-// Legend (BERSIH)
+// Legend
 // ===============================
 var legend = L.control({ position: 'bottomright' });
-legend.onAdd = function() {
+legend.onAdd = function () {
     var div = L.DomUtil.create('div', 'legend');
     div.innerHTML = "<b>Legenda</b><br>PUO Campus Area";
     return div;
@@ -58,24 +65,25 @@ L.control.measure({
     primaryLengthUnit: 'meters',
     secondaryLengthUnit: 'kilometers'
 }).addTo(map);
+
 L.control.scale().addTo(map);
 
 // ===============================
-// Search (TANPA marker / pin drop)
+// Search (TANPA MARKER)
 // ===============================
 L.Control.geocoder({
     defaultMarkGeocode: false,
     placeholder: 'Cari lokasi...'
-}).on('markgeocode', function(e){
+}).on('markgeocode', function (e) {
     map.flyTo(e.geocode.center, 17);
 }).addTo(map);
 
 // ===============================
-// Easy Buttons – Fokus ke PUO sahaja
+// Easy Button – Fokus PUO
 // ===============================
-if(L.easyButton){
-    L.easyButton('PUO', function(btn,map){
-        map.flyTo(puoLatLng, 18);  // fokus ke PUO bila butang ditekan
+if (L.easyButton) {
+    L.easyButton('PUO', function () {
+        map.flyTo(puoLatLng, 18);
     }, 'Fokus Kawasan PUO').addTo(map);
 }
 
