@@ -24,6 +24,12 @@ L.marker(puoLatLng)
   .openPopup();
 
 // ===============================
+// 🔴 ROUTING CONTROL VARIABLE
+// ===============================
+var routingControl;
+var currentUserLatLng = null; // Lokasi pengguna semasa
+
+// ===============================
 // Bangunan Layer (Polygon)
 // ===============================
 var bangunanLayer = L.geoJSON(null, {
@@ -34,9 +40,16 @@ var bangunanLayer = L.geoJSON(null, {
     fillOpacity: 0.5
   },
   onEachFeature: function (feature, layer) {
+
+    // Dapatkan koordinat tengah polygon untuk routing
+    var center = layer.getBounds().getCenter();
+
     layer.bindPopup(
       "<b>" + (feature.properties.nama || "Bangunan") + "</b><br>" +
-      (feature.properties.keterangan || "")
+      (feature.properties.keterangan || "") +
+      "<br><br><button onclick='routeToDestination([" +
+      center.lat + "," + center.lng +
+      "])'>🧭 Navigasi ke sini</button>"
     );
 
     layer.on('click', function () {
@@ -144,6 +157,9 @@ function onLocationFound(e) {
   var latlng = e.latlng;
   var radius = e.accuracy;
 
+  // Simpan lokasi pengguna semasa (untuk routing)
+  currentUserLatLng = latlng;
+
   // Marker pengguna
   if (!userMarker) {
     userMarker = L.marker(latlng).addTo(map)
@@ -188,4 +204,35 @@ map.locate({
 
 map.on('locationfound', onLocationFound);
 map.on('locationerror', onLocationError);
+
+// ===================================================
+// 🧭 ROUTING: USER → BANGUNAN
+// ===================================================
+function routeToDestination(destinationLatLng) {
+  if (!currentUserLatLng) {
+    alert("Lokasi pengguna belum dikesan.");
+    return;
+  }
+
+  // Buang laluan lama jika ada
+  if (routingControl) {
+    map.removeControl(routingControl);
+  }
+
+  // Buat laluan baru
+  routingControl = L.Routing.control({
+    waypoints: [
+      currentUserLatLng,
+      L.latLng(destinationLatLng[0], destinationLatLng[1])
+    ],
+    routeWhileDragging: false,
+    show: false,
+    addWaypoints: false,
+    draggableWaypoints: false,
+    lineOptions: {
+      styles: [{ color: '#dc3545', weight: 5 }]
+    },
+    createMarker: function () { return null; } // buang marker laluan default
+  }).addTo(map);
+}
 
