@@ -26,14 +26,22 @@ var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 }).addTo(map);
 
 // ===============================
+// Custom Icon PUO
+// ===============================
+var puoIcon = L.icon({
+  iconUrl: 'icons/puo.png',  // ikon PUO
+  iconSize: [50, 50],
+  iconAnchor: [25, 50],
+  popupAnchor: [0, -50]
+});
+
+// ===============================
 // Marker PUO
 // ===============================
-var puoMarker = L.marker(puoLatLng, {
-  icon: L.icon({
-    iconUrl: 'icons/user.png', // pastikan fail marker.png ada dalam folder icons/
-    iconSize: [40, 40]
-  })
-}).addTo(map).bindPopup("<b>Politeknik Ungku Omar</b><br>Ipoh, Perak").openPopup();
+var puoMarker = L.marker(puoLatLng, {icon: puoIcon})
+  .addTo(map)
+  .bindPopup("<b>Politeknik Ungku Omar</b><br>Ipoh, Perak")
+  .openPopup();
 
 // ===============================
 // Layer Bangunan
@@ -122,8 +130,10 @@ L.Control.geocoder({
   var center = e.geocode.center;
   if(searchMarker) map.removeLayer(searchMarker);
   map.flyTo(center, 19);
-  searchMarker = L.marker(center).addTo(map)
-                 .bindPopup(e.geocode.name).openPopup();
+  searchMarker = L.marker(center)
+                 .addTo(map)
+                 .bindPopup(e.geocode.name)
+                 .openPopup();
 }).addTo(map);
 
 // ===============================
@@ -135,11 +145,11 @@ var followUser = true;
 function onLocationFound(e) {
   var latlng = e.latlng;
   var radius = e.accuracy;
-  if(radius > 30) radius = 30; // hadkan radius bulatan
+  if(radius > 30) radius = 30;
 
   if(!userMarker){
     userMarker = L.marker(latlng, {
-      icon: L.icon({ iconUrl: 'icons/user.png', iconSize: [30,30] }) // pastikan fail user.png ada dalam folder icons/
+      icon: L.icon({ iconUrl: 'icons/user.png', iconSize: [30,30] })
     }).addTo(map).bindPopup("📍 Lokasi Anda");
   } else userMarker.setLatLng(latlng);
 
@@ -176,5 +186,3 @@ if(L.easyButton){
     if(followUser && userMarker) map.flyTo(userMarker.getLatLng(), 19);
   }, 'Toggle Live Tracking').addTo(map);
 }
-
-
