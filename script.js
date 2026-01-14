@@ -30,7 +30,7 @@ var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 // ===============================
 var puoMarker = L.marker(puoLatLng, {
   icon: L.icon({
-    iconUrl: 'icons/marker.png', // pastikan fail marker.png ada dalam folder icons/
+    iconUrl: 'icons/user.png', // pastikan fail marker.png ada dalam folder icons/
     iconSize: [40, 40]
   })
 }).addTo(map).bindPopup("<b>Politeknik Ungku Omar</b><br>Ipoh, Perak").openPopup();
@@ -176,4 +176,5 @@ if(L.easyButton){
     if(followUser && userMarker) map.flyTo(userMarker.getLatLng(), 19);
   }, 'Toggle Live Tracking').addTo(map);
 }
+
 
