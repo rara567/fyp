@@ -59,18 +59,18 @@ legend.onAdd = function () {
 legend.addTo(map);
 
 // ===============================
-// Measure & Scale
+// Measure & Scale (TIADA AUTO PAN)
 // ===============================
 L.control.measure({
     primaryLengthUnit: 'meters',
-    secondaryLengthUnit: 'kilometers'
+    secondaryLengthUnit: 'kilometers',
+    popupOptions: { autoPan: false }  // stop map auto terbang
 }).addTo(map);
 
 L.control.scale().addTo(map);
 
 // ===============================
-// Search (TANPA MARKER)
-// ===============================
+// Search (TANPA MARKER / PIN DROP)
 L.Control.geocoder({
     defaultMarkGeocode: false,
     placeholder: 'Cari lokasi...'
@@ -80,7 +80,6 @@ L.Control.geocoder({
 
 // ===============================
 // Easy Button – Fokus PUO
-// ===============================
 if (L.easyButton) {
     L.easyButton('PUO', function () {
         map.flyTo(puoLatLng, 18);
