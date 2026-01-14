@@ -40,18 +40,49 @@ var baseMaps = {
     "Satelit": satellite
 };
 
-// Overlay layers
+// ===============================
+// Layer bangunan (Dewan Jubli sahaja untuk test)
+// ===============================
 var bangunanLayer = L.geoJSON(null, {
     style: { color: "#0b5ed7", weight: 2, fillColor: "#0b5ed7", fillOpacity: 0.5 },
     onEachFeature: function(feature, layer) {
         var popupContent = "<b>" + feature.properties.nama + "</b><br>";
         if(feature.properties.gambar) popupContent += "<img src='" + feature.properties.gambar + "' width='150' style='border-radius:5px'><br>";
-        if(feature.properties.keterangan) popupContent += feature.properties.keterangan;
+        if(feature.properties.keterangan) popupContent += feature.properties.keterangan || "";
         layer.bindPopup(popupContent);
         layer.on('click', function() { map.fitBounds(layer.getBounds()); });
     }
 });
 
+// ===============================
+// Masukkan data Dewan Jubli
+// ===============================
+bangunanLayer.addData({
+    "type": "FeatureCollection",
+    "features": [
+        {
+            "type": "Feature",
+            "properties": {
+                "nama": "Dewan Jubli",
+                "gambar": "data/images/dj.png"
+            },
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [[
+                    [101.1238, 4.5872],
+                    [101.1240, 4.5872],
+                    [101.1240, 4.5874],
+                    [101.1238, 4.5874],
+                    [101.1238, 4.5872]
+                ]]
+            }
+        }
+    ]
+}).addTo(map);
+
+// ===============================
+// Layer Fasiliti
+// ===============================
 var fasilitiLayer = L.geoJSON(null, {
     pointToLayer: function(feature, latlng) {
         var iconColor = "#198754"; // default hijau
@@ -68,7 +99,7 @@ var fasilitiLayer = L.geoJSON(null, {
 });
 
 // ===============================
-// Load GeoJSON
+// Load GeoJSON (untuk bangunan lain & fasiliti jika ada)
 // ===============================
 fetch('data/bangunan.geojson')
   .then(res => res.json())
