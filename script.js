@@ -127,8 +127,65 @@ legend.onAdd = function () {
   div.innerHTML += "<b>Legenda</b><br>";
   div.innerHTML += '<i style="background:#0b5ed7"></i> Bangunan<br>';
   div.innerHTML += '<i style="background:#198754"></i> Fasiliti<br>';
+  div.innerHTML += '<i style="background:#136aec"></i> Lokasi Pengguna<br>';
   return div;
 };
 
 legend.addTo(map);
+
+// ===================================================
+// 🔴 USER LOCATION TRACKING (MAP FOLLOW USER)
+// ===================================================
+var userMarker, accuracyCircle;
+var followUser = true;
+
+// Bila lokasi dijumpai
+function onLocationFound(e) {
+  var latlng = e.latlng;
+  var radius = e.accuracy;
+
+  // Marker pengguna
+  if (!userMarker) {
+    userMarker = L.marker(latlng).addTo(map)
+      .bindPopup("📍 Lokasi Anda");
+  } else {
+    userMarker.setLatLng(latlng);
+  }
+
+  // Bulatan ketepatan GPS
+  if (!accuracyCircle) {
+    accuracyCircle = L.circle(latlng, {
+      radius: radius,
+      color: '#136aec',
+      fillColor: '#136aec',
+      fillOpacity: 0.2
+    }).addTo(map);
+  } else {
+    accuracyCircle.setLatLng(latlng).setRadius(radius);
+  }
+
+  // Peta ikut pergerakan pengguna
+  if (followUser) {
+    map.flyTo(latlng, 18, {
+      animate: true,
+      duration: 1.2
+    });
+  }
+}
+
+// Jika lokasi gagal
+function onLocationError(e) {
+  alert("Sila benarkan akses lokasi untuk menggunakan fungsi ini.");
+}
+
+// Aktifkan LIVE tracking
+map.locate({
+  watch: true,                 // 🔥 real-time
+  setView: false,
+  maxZoom: 18,
+  enableHighAccuracy: true
+});
+
+map.on('locationfound', onLocationFound);
+map.on('locationerror', onLocationError);
 
