@@ -1,18 +1,28 @@
 // ===============================
-// Koordinat PUO (4 titik perpuluhan)
+// Koordinat PUO
 // ===============================
 var puoLatLng = [4.5886, 101.1261];
 
 // ===============================
 // Initialize Map
 // ===============================
-var map = L.map('map').setView(puoLatLng, 18);
+var map = L.map('map', {
+  center: puoLatLng,
+  zoom: 18,
+  maxZoom: 22,          // max zoom peta Leaflet
+  minZoom: 5,
+  touchZoom: true,
+  scrollWheelZoom: true,
+  doubleClickZoom: true
+});
 
 // ===============================
 // Basemap
 // ===============================
 var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  attribution: '© OpenStreetMap Contributors'
+  attribution: '© OpenStreetMap Contributors',
+  maxZoom: 22,        // max zoom di Leaflet
+  maxNativeZoom: 19   // max tile sebenar tersedia di OSM
 }).addTo(map);
 
 // ===============================
@@ -34,11 +44,8 @@ var bangunanLayer = L.geoJSON(null, {
     fillOpacity: 0.5
   },
   onEachFeature: function (feature, layer) {
-    layer.bindPopup(
-      "<b>" + (feature.properties.nama || "Bangunan") + "</b><br>" +
-      (feature.properties.keterangan || "")
-    );
-
+    layer.bindPopup("<b>" + (feature.properties.nama || "Bangunan") + "</b><br>" +
+                    (feature.properties.keterangan || ""));
     layer.on('click', function () {
       map.fitBounds(layer.getBounds());
     });
@@ -108,7 +115,8 @@ L.Control.geocoder({
 
   if (searchMarker) map.removeLayer(searchMarker);
 
-  map.flyTo(center, 17, { duration: 1.5 });
+  // Gunakan zoom ≤19 supaya tile ada
+  map.flyTo(center, 19, { duration: 1.5 });
 
   searchMarker = L.marker(center)
     .addTo(map)
@@ -130,29 +138,24 @@ legend.onAdd = function () {
   div.innerHTML += '<i style="background:#136aec"></i> Lokasi Pengguna<br>';
   return div;
 };
-
 legend.addTo(map);
 
-// ===================================================
-// 🔴 USER LOCATION TRACKING (MAP FOLLOW USER)
-// ===================================================
+// ===============================
+// USER LOCATION TRACKING
+// ===============================
 var userMarker, accuracyCircle;
 var followUser = true;
 
-// Bila lokasi dijumpai
 function onLocationFound(e) {
   var latlng = e.latlng;
   var radius = e.accuracy;
 
-  // Marker pengguna
   if (!userMarker) {
-    userMarker = L.marker(latlng).addTo(map)
-      .bindPopup("📍 Lokasi Anda");
+    userMarker = L.marker(latlng).addTo(map).bindPopup("📍 Lokasi Anda");
   } else {
     userMarker.setLatLng(latlng);
   }
 
-  // Bulatan ketepatan GPS
   if (!accuracyCircle) {
     accuracyCircle = L.circle(latlng, {
       radius: radius,
@@ -164,28 +167,32 @@ function onLocationFound(e) {
     accuracyCircle.setLatLng(latlng).setRadius(radius);
   }
 
-  // Peta ikut pergerakan pengguna
+  // Live tracking dengan zoom ≤19
   if (followUser) {
-    map.flyTo(latlng, 18, {
-      animate: true,
-      duration: 1.2
-    });
+    map.flyTo(latlng, 19, { animate: true, duration: 1.2 });
   }
 }
 
-// Jika lokasi gagal
 function onLocationError(e) {
   alert("Sila benarkan akses lokasi untuk menggunakan fungsi ini.");
 }
 
-// Aktifkan LIVE tracking
+// Aktifkan live tracking
 map.locate({
-  watch: true,                 // 🔥 real-time
+  watch: true,
   setView: false,
-  maxZoom: 18,
+  maxZoom: 19,         // Jangan melebihi 19
   enableHighAccuracy: true
 });
-
 map.on('locationfound', onLocationFound);
 map.on('locationerror', onLocationError);
+
+// ===============================
+// Butang Fokus PUO (optional)
+// ===============================
+if (L.easyButton) { // pastikan easyButton diimport
+  L.easyButton('fa-university', function(btn, map){
+    map.flyTo(puoLatLng, 19); // zoom ≤19
+  }, 'Fokus ke PUO').addTo(map);
+}
 
