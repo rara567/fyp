@@ -6,12 +6,17 @@ var puoLatLng = [4.5886, 101.1261];
 // ===============================
 // Initialize Map
 // ===============================
-var map = L.map('map').setView(puoLatLng, 18);
+var map = L.map('map', {
+  center: puoLatLng,
+  zoom: 18,
+  maxZoom: 20,  // max zoom untuk pengguna
+  minZoom: 5    // min zoom
+});
 
 // ===============================
 // Basemap
 // ===============================
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   attribution: '© OpenStreetMap Contributors'
 }).addTo(map);
 
@@ -61,59 +66,11 @@ var fasilitiLayer = L.geoJSON(null, {
 });
 
 // ===============================
-// Sidebar & Routing
-// ===============================
-var userMarker, accuracyCircle, currentUserLatLng;
-var followUser = true;
-var routeLine;
-
-// Fungsi routing dari pengguna ke bangunan
-function routeToDestination(destLatLng) {
-  if (!currentUserLatLng) {
-    alert("Lokasi pengguna belum ditemui!");
-    return;
-  }
-
-  // Hapus laluan lama jika ada
-  if (routeLine) map.removeLayer(routeLine);
-
-  routeLine = L.polyline([currentUserLatLng, destLatLng], {
-    color: 'red',
-    weight: 4,
-    opacity: 0.7
-  }).addTo(map);
-}
-
-// Populate sidebar
-function populateSidebar(features) {
-  var buildingList = document.getElementById('buildingList');
-  buildingList.innerHTML = '';
-
-  features.forEach(function(feature, index) {
-    var li = document.createElement('li');
-    li.textContent = feature.properties.nama || "Bangunan " + (index+1);
-
-    li.addEventListener('click', function() {
-      var layer = bangunanLayer.getLayers()[index];
-      var center = layer.getBounds().getCenter();
-      map.fitBounds(layer.getBounds());
-      routeToDestination([center.lat, center.lng]);
-      layer.openPopup();
-    });
-
-    buildingList.appendChild(li);
-  });
-}
-
-// ===============================
 // Load GeoJSON Data
 // ===============================
 fetch('data/bangunan.geojson')
   .then(res => res.json())
-  .then(data => {
-    bangunanLayer.addData(data).addTo(map);
-    populateSidebar(data.features); // Sidebar
-  });
+  .then(data => bangunanLayer.addData(data).addTo(map));
 
 fetch('data/fasiliti.geojson')
   .then(res => res.json())
@@ -146,6 +103,7 @@ L.control.scale().addTo(map);
 // Search (Global)
 // ===============================
 var searchMarker;
+
 L.Control.geocoder({
   defaultMarkGeocode: false,
   placeholder: 'Cari lokasi'
@@ -175,20 +133,29 @@ legend.onAdd = function () {
   div.innerHTML += '<i style="background:#0b5ed7"></i> Bangunan<br>';
   div.innerHTML += '<i style="background:#198754"></i> Fasiliti<br>';
   div.innerHTML += '<i style="background:#136aec"></i> Lokasi Pengguna<br>';
-  div.innerHTML += '<i style="background:red"></i> Laluan Pengguna<br>';
   return div;
 };
 
 legend.addTo(map);
 
-// ===============================
-// 🔴 USER LOCATION TRACKING
-// ===============================
+// ===================================================
+// 🔴 USER LOCATION TRACKING (MAP FOLLOW USER)
+// ===================================================
+var userMarker, accuracyCircle;
+var followUser = true; // true = map auto-zoom ikut pengguna
+var currentUserLatLng;
+
+// 🔹 Hentikan auto-follow bila pengguna interaksi dengan map
+map.on('mousedown touchstart', function() {
+  followUser = false;
+});
+
+// Bila lokasi dijumpai
 function onLocationFound(e) {
   var latlng = e.latlng;
   var radius = e.accuracy;
 
-  // Limit radius maksimum 100m untuk desktop
+  // Limit radius maksimum supaya bulatan tidak terlalu besar
   if (radius > 100) radius = 100;
 
   currentUserLatLng = latlng;
@@ -213,7 +180,7 @@ function onLocationFound(e) {
     accuracyCircle.setLatLng(latlng).setRadius(radius);
   }
 
-  // Peta ikut pergerakan pengguna
+  // Auto-zoom hanya jika followUser = true
   if (followUser) {
     map.flyTo(latlng, 18, {
       animate: true,
@@ -222,15 +189,17 @@ function onLocationFound(e) {
   }
 }
 
+// Jika lokasi gagal
 function onLocationError(e) {
   alert("Sila benarkan akses lokasi untuk menggunakan fungsi ini.");
 }
 
 // Aktifkan LIVE tracking
 map.locate({
-  watch: true,
+  watch: true,                 // 🔥 real-time
   setView: false,
-  maxZoom: 18,
+  maxZoom: 20,
+  minZoom: 5,
   enableHighAccuracy: true
 });
 
