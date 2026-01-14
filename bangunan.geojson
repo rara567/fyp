@@ -1,0 +1,22 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "nama": "Dewan Jubli",
+        "gambar": "data/images/dj.png"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [101.1238, 4.5872],
+          [101.1240, 4.5872],
+          [101.1240, 4.5874],
+          [101.1238, 4.5874],
+          [101.1238, 4.5872]
+        ]]
+      }
+    }
+  ]
+}
