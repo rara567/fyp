@@ -186,14 +186,16 @@ map.on('locationfound', onLocationFound);
 map.on('locationerror', onLocationError);
 
 // ===============================
-// Easy Buttons
+// Easy Buttons (Teks Sahaja)
 // ===============================
 if(L.easyButton){
-  L.easyButton('fa-university', function(btn,map){
+  // Butang fokus ke PUO dengan teks "Politeknik"
+  L.easyButton('Politeknik', function(btn,map){
     map.flyTo(puoLatLng, 19);
   }, 'Fokus ke PUO').addTo(map);
 
-  L.easyButton('fa-location-arrow', function(btn,map){
+  // Butang toggle live location dengan teks "Lokasi Sekarang"
+  L.easyButton('Lokasi Sekarang', function(btn,map){
     followUser = !followUser;
     if(followUser && userMarker) map.flyTo(userMarker.getLatLng(), 19);
   }, 'Toggle Live Tracking').addTo(map);
