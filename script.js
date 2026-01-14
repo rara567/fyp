@@ -9,7 +9,7 @@ var puoLatLng = [4.5886, 101.1261];
 var map = L.map('map', {
   center: puoLatLng,
   zoom: 18,
-  maxZoom: 22,          // max zoom peta Leaflet
+  maxZoom: 22,          // zoom maksimum Leaflet
   minZoom: 5,
   touchZoom: true,
   scrollWheelZoom: true,
@@ -22,7 +22,7 @@ var map = L.map('map', {
 var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   attribution: '© OpenStreetMap Contributors',
   maxZoom: 22,        // max zoom di Leaflet
-  maxNativeZoom: 19   // max tile sebenar tersedia di OSM
+  maxNativeZoom: 19   // max tile sebenar tersedia
 }).addTo(map);
 
 // ===============================
@@ -144,11 +144,14 @@ legend.addTo(map);
 // USER LOCATION TRACKING
 // ===============================
 var userMarker, accuracyCircle;
-var followUser = true;
+var followUser = true; // toggle live tracking
 
 function onLocationFound(e) {
   var latlng = e.latlng;
   var radius = e.accuracy;
+
+  // Hadkan radius maksimum supaya bulatan biru tidak terlalu besar
+  if (radius > 30) radius = 30;
 
   if (!userMarker) {
     userMarker = L.marker(latlng).addTo(map).bindPopup("📍 Lokasi Anda");
@@ -167,7 +170,7 @@ function onLocationFound(e) {
     accuracyCircle.setLatLng(latlng).setRadius(radius);
   }
 
-  // Live tracking dengan zoom ≤19
+  // Auto zoom hanya jika followUser = true
   if (followUser) {
     map.flyTo(latlng, 19, { animate: true, duration: 1.2 });
   }
@@ -181,18 +184,29 @@ function onLocationError(e) {
 map.locate({
   watch: true,
   setView: false,
-  maxZoom: 19,         // Jangan melebihi 19
+  maxZoom: 19, // jangan melebihi tile OSM
   enableHighAccuracy: true
 });
 map.on('locationfound', onLocationFound);
 map.on('locationerror', onLocationError);
 
 // ===============================
-// Butang Fokus PUO (optional)
+// Butang Fokus PUO
 // ===============================
-if (L.easyButton) { // pastikan easyButton diimport
+if (L.easyButton) {
   L.easyButton('fa-university', function(btn, map){
-    map.flyTo(puoLatLng, 19); // zoom ≤19
+    map.flyTo(puoLatLng, 19);
   }, 'Fokus ke PUO').addTo(map);
+
+  // Butang toggle live tracking
+  L.easyButton('fa-location-arrow', function(btn, map){
+    followUser = !followUser;
+    if(followUser && userMarker) {
+      map.flyTo(userMarker.getLatLng(), 19);
+      alert("Live tracking dihidupkan");
+    } else {
+      alert("Live tracking dimatikan");
+    }
+  }, 'Toggle Live Tracking').addTo(map);
 }
 
