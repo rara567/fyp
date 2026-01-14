@@ -22,7 +22,7 @@ var satellite = L.tileLayer('https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}'
 // ===============================
 var map = L.map('map', {
     center: puoLatLng,
-    zoom: 18,
+    zoom: 16,       // default zoom biasa
     minZoom: 5,
     maxZoom: 22,
     scrollWheelZoom: true,
@@ -81,12 +81,11 @@ var puoIcon = L.icon({
 });
 
 // ===============================
-// Marker PUO
+// Marker PUO (Popup hanya muncul jika klik)
 // ===============================
 L.marker(puoLatLng, {icon: puoIcon})
   .addTo(map)
-  .bindPopup("<b>Politeknik Ungku Omar</b><br>Ipoh, Perak")
-  .openPopup();
+  .bindPopup("<b>Politeknik Ungku Omar</b><br>Ipoh, Perak");
 
 // ===============================
 // Easy Buttons – Fokus PUO sahaja
@@ -96,13 +95,4 @@ if(L.easyButton){
     map.flyTo(puoLatLng, 18);
   }, 'Fokus Kawasan PUO').addTo(map);
 }
-
-// ===============================
-// Kawalan Zoom Minimum / Lembut
-// ===============================
-map.on('zoomend', function () {
-  if(map.getZoom() < 14){
-    map.flyTo(puoLatLng, 14, { animate:true, duration:0.5 });
-  }
-});
 
