@@ -69,14 +69,15 @@ header p {
 }
 
 /* ===============================
-   EASY BUTTON – TEKS PUO KECIL
+   EASY BUTTON – TEKS PUO KECIL & KE KIRI
 =============================== */
-.leaflet-easybutton-button span {
-  font-size: 14px !important;  /* teks kecil supaya muat dalam kotak */
-  font-weight: bold;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.puo-btn-text {
+    font-size: 10px !important;  /* teks kecil */
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;  /* alihkan ke kiri */
+    padding-left: 4px;            /* jarak sedikit dari tepi */
 }
 
 /* ===============================
