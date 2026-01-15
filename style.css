@@ -114,7 +114,7 @@ header p {
 }
 
 /* ===============================
-   RESPONSIVE
+   RESPONSIVE UNTUK TELEFON
 =============================== */
 @media screen and (max-width: 768px) {
   #map {
@@ -132,6 +132,30 @@ header p {
   .legend {
     font-size: 12px;
     line-height: 16px;
+  }
+
+  /* Easy Button lebih besar di telefon */
+  .leaflet-easybutton-button span,
+  .puo-btn-text {
+      font-size: 14px !important;
+      padding: 8px 12px;
+  }
+
+  /* Layer Control lebih mudah klik */
+  .leaflet-control-layers {
+      font-size: 14px;
+      padding: 8px;
+  }
+
+  /* Search box lebih mudah klik */
+  .leaflet-control-geocoder input {
+      font-size: 14px;
+      height: 30px;
+  }
+
+  /* Popup lebih jelas */
+  .leaflet-popup-content {
+      font-size: 14px;
   }
 }
 
