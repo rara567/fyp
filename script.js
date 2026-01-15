@@ -96,8 +96,9 @@ if (L.easyButton) {
                 map.flyTo(puoLatLng, 18);
             },
             title: 'Fokus Kawasan PUO',
-            icon: '<span style="font-weight:bold; font-size:20px; padding:6px 12px; display:flex; align-items:center; justify-content:center;">PUO</span>'
+            icon: '<span style="font-weight:bold; font-size:10px; padding:6px 12px; display:flex; align-items:center; justify-content:center;">PUO</span>'
         }]
     }).addTo(map);
 }
+
 
