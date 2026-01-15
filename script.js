@@ -25,11 +25,19 @@ var satellite = L.tileLayer('https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}'
 });
 
 // ===============================
+// Tentukan zoom awal ikut peranti
+// ===============================
+var initialZoom = 16;  // default desktop
+if(window.innerWidth <= 768){
+    initialZoom = 17;  // zoom lebih dekat untuk telefon
+}
+
+// ===============================
 // Initialize Map
 // ===============================
 var map = L.map('map', {
     center: puoLatLng,
-    zoom: 16,
+    zoom: initialZoom,
     minZoom: 5,
     maxZoom: 22,
     scrollWheelZoom: true,
@@ -82,7 +90,7 @@ L.Control.geocoder({
 }).addTo(map);
 
 // ===============================
-// Easy Button – Fokus PUO (Teks "PUO" Kecil & Tengah)
+// Easy Button – Fokus PUO (Kecil & Ke Kiri)
 // ===============================
 if (L.easyButton) {
     L.easyButton({
@@ -96,7 +104,6 @@ if (L.easyButton) {
                 map.flyTo(puoLatLng, 18);
             },
             title: 'Fokus Kawasan PUO',
-            // Guna kelas CSS supaya saiz teks boleh dikawal dengan mudah
             icon: '<span class="puo-btn-text">PUO</span>'
         }]
     }).addTo(map);
