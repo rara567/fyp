@@ -60,16 +60,20 @@ legend.addTo(map);
 
 // ===============================
 // Measure & Scale (TIADA AUTO PAN)
+// ===============================
 L.control.measure({
     primaryLengthUnit: 'meters',
     secondaryLengthUnit: 'kilometers',
-    popupOptions: { autoPan: false } // stop map auto terbang
+    activeColor: '#0b5ed7',
+    completedColor: '#198754',
+    popupOptions: { autoPan: false }
 }).addTo(map);
 
 L.control.scale().addTo(map);
 
 // ===============================
 // Search (TANPA MARKER / PIN DROP)
+// ===============================
 L.Control.geocoder({
     defaultMarkGeocode: false,
     placeholder: 'Cari lokasi...'
@@ -96,4 +100,3 @@ if (L.easyButton) {
         }]
     }).addTo(map);
 }
-
