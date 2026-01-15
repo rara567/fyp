@@ -1,3 +1,4 @@
+
 // ===============================
 // MATIKAN SEMUA MARKER LEAFLET
 // ===============================
@@ -82,7 +83,7 @@ L.Control.geocoder({
 }).addTo(map);
 
 // ===============================
-// Easy Button – Fokus PUO (Teks "PUO")
+// Easy Button – Fokus PUO (Teks "PUO" Besar)
 // ===============================
 if (L.easyButton) {
     L.easyButton({
@@ -96,7 +97,7 @@ if (L.easyButton) {
                 map.flyTo(puoLatLng, 18);
             },
             title: 'Fokus Kawasan PUO',
-            icon: '<span style="font-weight:bold;">PUO</span>'
+            icon: '<span style="font-weight:bold; font-size:16px; padding:4px 8px; display:inline-block;">PUO</span>'
         }]
     }).addTo(map);
 }
