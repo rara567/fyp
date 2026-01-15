@@ -82,7 +82,7 @@ L.Control.geocoder({
 }).addTo(map);
 
 // ===============================
-// Easy Button – Fokus PUO (Teks "PUO" Besar & Tengah)
+// Easy Button – Fokus PUO (Teks "PUO" Kecil & Tengah)
 // ===============================
 if (L.easyButton) {
     L.easyButton({
@@ -96,9 +96,9 @@ if (L.easyButton) {
                 map.flyTo(puoLatLng, 18);
             },
             title: 'Fokus Kawasan PUO',
-            icon: '<span style="font-weight:bold; font-size:10px; padding:6px 12px; display:flex; align-items:center; justify-content:center;">PUO</span>'
+            // Guna kelas CSS supaya saiz teks boleh dikawal dengan mudah
+            icon: '<span class="puo-btn-text">PUO</span>'
         }]
     }).addTo(map);
 }
-
 
