@@ -8,118 +8,14 @@ body {
 }
 
 /* ===============================
-   HEADER
+   HEADER (lebih menarik)
 =============================== */
 header {
   text-align: center;
-  background: linear-gradient(135deg, #0b5ed7, #198754);
+  background: linear-gradient(135deg, #0b5ed7, #198754, #00bfff, #198754);
+  background-size: 400% 400%;
+  animation: gradientBG 10s ease infinite;
   color: white;
-  padding: 15px;
-}
-
-header h1 {
-  margin: 0;
-  font-size: 22px;
-}
-
-header p {
-  margin: 5px 0 0;
-  font-size: 14px;
-}
-
-/* ===============================
-   MAP
-=============================== */
-#map {
-  height: 85vh;
-  width: 100%;
-  position: relative;
-  z-index: 0;
-}
-
-/* ===============================
-   LEGEND
-=============================== */
-.legend {
-  background: white;
-  padding: 10px;
-  line-height: 18px;
-  font-size: 13px;
-  color: #333;
-  border-radius: 6px;
-  box-shadow: 0 0 8px rgba(0,0,0,0.3);
-}
-
-/* ===============================
-   SEARCH BOX
-=============================== */
-.leaflet-control-geocoder {
-  box-shadow: 0 0 8px rgba(0,0,0,0.4);
-  border-radius: 4px;
-}
-
-/* ===============================
-   EASY BUTTON
-=============================== */
-.leaflet-easybutton-button {
-  background-color: white;
-  border-radius: 4px;
-  border: 1px solid #ccc;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.3);
-}
-
-/* ===============================
-   LAYER CONTROL
-=============================== */
-.leaflet-control-layers {
-  background: white;
-  border-radius: 6px;
-  box-shadow: 0 0 8px rgba(0,0,0,0.3);
-  padding: 5px;
-  font-size: 13px;
-}
-
-/* ===============================
-   POPUP
-=============================== */
-.leaflet-popup-content-wrapper {
-  border-radius: 6px;
-  box-shadow: 0 0 8px rgba(0,0,0,0.3);
-  font-size: 13px;
-}
-
-.leaflet-popup-content img {
-  max-width: 100%;
-  border-radius: 4px;
-  margin-bottom: 5px;
-}
-
-/* ===============================
-   MATIKAN SEMUA MARKER
-=============================== */
-.no-marker {
-  display: none !important;
-}
-
-/* ===============================
-   RESPONSIVE
-=============================== */
-@media screen and (max-width: 768px) {
-  #map {
-    height: 80vh;
-  }
-
-  header h1 {
-    font-size: 18px;
-  }
-
-  header p {
-    font-size: 12px;
-  }
-
-  .legend {
-    font-size: 12px;
-    line-height: 16px;
-  }
-}
+  padding: 20px;
+  box-
 
