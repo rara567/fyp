@@ -69,6 +69,17 @@ header p {
 }
 
 /* ===============================
+   EASY BUTTON – TEKS PUO KECIL
+=============================== */
+.leaflet-easybutton-button span {
+  font-size: 14px !important;  /* teks kecil supaya muat dalam kotak */
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ===============================
    LAYER CONTROL
 =============================== */
 .leaflet-control-layers {
