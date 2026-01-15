@@ -78,10 +78,22 @@ L.Control.geocoder({
 }).addTo(map);
 
 // ===============================
-// Easy Button – Fokus PUO
+// Easy Button – Fokus PUO (Teks "PUO")
+// ===============================
 if (L.easyButton) {
-    L.easyButton('PUO', function () {
-        map.flyTo(puoLatLng, 18);
-    }, 'Fokus Kawasan PUO').addTo(map);
+    L.easyButton({
+        id: 'btn-puo',
+        position: 'topright',
+        type: 'replace',
+        leafletClasses: true,
+        states: [{
+            stateName: 'focus-puo',
+            onClick: function(btn, map){
+                map.flyTo(puoLatLng, 18);
+            },
+            title: 'Fokus Kawasan PUO',
+            icon: '<span style="font-weight:bold;">PUO</span>'
+        }]
+    }).addTo(map);
 }
 
