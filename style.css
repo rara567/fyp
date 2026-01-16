@@ -1,161 +1,95 @@
 /* ===============================
-   BODY
+   WELCOME MODAL / POPUP
 =============================== */
-body {
-  margin: 0;
-  font-family: "Segoe UI", Arial, sans-serif;
-  background: #f4f6f9;
-}
-
-/* ===============================
-   HEADER
-=============================== */
-header {
-  text-align: center;
-  background: linear-gradient(135deg, #0b5ed7, #198754);
-  color: white;
-  padding: 15px;
-}
-
-header h1 {
-  margin: 0;
-  font-size: 22px;
-}
-
-header p {
-  margin: 5px 0 0;
-  font-size: 14px;
-}
-
-/* ===============================
-   MAP
-=============================== */
-#map {
-  height: 85vh;
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
-  position: relative;
-  z-index: 0;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999; /* paling atas */
 }
 
-/* ===============================
-   LEGEND
-=============================== */
-.legend {
-  background: white;
-  padding: 10px;
-  line-height: 18px;
-  font-size: 13px;
-  color: #333;
-  border-radius: 6px;
-  box-shadow: 0 0 8px rgba(0,0,0,0.3);
+.modal-box {
+  background: #ffffff;
+  padding: 30px 25px;
+  border-radius: 18px;
+  text-align: center;
+  width: 90%;
+  max-width: 420px;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.35);
+  animation: modalFade 0.4s ease;
 }
 
-/* ===============================
-   SEARCH BOX
-=============================== */
-.leaflet-control-geocoder {
-  box-shadow: 0 0 8px rgba(0,0,0,0.4);
-  border-radius: 4px;
+.modal-logo {
+  width: 120px;
+  margin-bottom: 15px;
 }
 
-/* ===============================
-   EASY BUTTON
-=============================== */
-.leaflet-easybutton-button {
-  background-color: white;
-  border-radius: 4px;
-  border: 1px solid #ccc;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+.modal-box h2 {
+  margin: 10px 0;
+  font-size: 24px;
+  font-weight: bold;
 }
 
-/* ===============================
-   EASY BUTTON – TEKS PUO KECIL & KE KIRI
-=============================== */
-.puo-btn-text {
-    font-size: 10px !important;  /* teks kecil */
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;  /* alihkan ke kiri */
-    padding-left: 4px;            /* jarak sedikit dari tepi */
+.modal-text {
+  font-size: 16px;
+  line-height: 1.6;
+  margin-bottom: 25px;
+  color: #000;
 }
 
-/* ===============================
-   LAYER CONTROL
-=============================== */
-.leaflet-control-layers {
-  background: white;
-  border-radius: 6px;
-  box-shadow: 0 0 8px rgba(0,0,0,0.3);
-  padding: 5px;
-  font-size: 13px;
+#btnMasuk {
+  background: #0b5ed7;
+  color: white;
+  border: none;
+  padding: 10px 36px;
+  font-size: 16px;
+  border-radius: 10px;
+  cursor: pointer;
 }
 
-/* ===============================
-   POPUP
-=============================== */
-.leaflet-popup-content-wrapper {
-  border-radius: 6px;
-  box-shadow: 0 0 8px rgba(0,0,0,0.3);
-  font-size: 13px;
+#btnMasuk:hover {
+  background: #084298;
 }
 
-.leaflet-popup-content img {
-  max-width: 100%;
-  border-radius: 4px;
-  margin-bottom: 5px;
+/* ANIMATION */
+@keyframes modalFade {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
-/* ===============================
-   MATIKAN SEMUA MARKER
-=============================== */
-.no-marker {
-  display: none !important;
-}
-
-/* ===============================
-   RESPONSIVE UNTUK TELEFON
-=============================== */
+/* RESPONSIVE MODAL (TELEFON) */
 @media screen and (max-width: 768px) {
-  #map {
-    height: 80vh;
+  .modal-box {
+    padding: 25px 20px;
   }
 
-  header h1 {
-    font-size: 18px;
+  .modal-logo {
+    width: 100px;
   }
 
-  header p {
-    font-size: 12px;
+  .modal-box h2 {
+    font-size: 20px;
   }
 
-  .legend {
-    font-size: 12px;
-    line-height: 16px;
+  .modal-text {
+    font-size: 14px;
   }
 
-  /* Easy Button lebih besar di telefon */
-  .leaflet-easybutton-button span,
-  .puo-btn-text {
-      font-size: 14px !important;
-      padding: 8px 12px;
-  }
-
-  /* Layer Control lebih mudah klik */
-  .leaflet-control-layers {
-      font-size: 14px;
-      padding: 8px;
-  }
-
-  /* Search box lebih mudah klik */
-  .leaflet-control-geocoder input {
-      font-size: 14px;
-      height: 30px;
-  }
-
-  /* Popup lebih jelas */
-  .leaflet-popup-content {
-      font-size: 14px;
+  #btnMasuk {
+    font-size: 15px;
+    padding: 10px 30px;
   }
 }
 
