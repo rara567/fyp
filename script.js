@@ -27,9 +27,9 @@ var satellite = L.tileLayer('https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}'
 // ===============================
 // Tentukan zoom awal ikut peranti
 // ===============================
-var initialZoom = 16;  // default desktop
-if(window.innerWidth <= 768){
-    initialZoom = 17;  // zoom lebih dekat untuk telefon
+var initialZoom = 16; // desktop
+if (window.innerWidth <= 768) {
+    initialZoom = 17; // telefon
 }
 
 // ===============================
@@ -80,7 +80,7 @@ L.control.measure({
 L.control.scale().addTo(map);
 
 // ===============================
-// Search (TANPA MARKER / PIN DROP)
+// Search (TANPA MARKER)
 // ===============================
 L.Control.geocoder({
     defaultMarkGeocode: false,
@@ -90,7 +90,7 @@ L.Control.geocoder({
 }).addTo(map);
 
 // ===============================
-// Easy Button – Fokus PUO (Kecil & Ke Kiri)
+// Easy Button – Fokus PUO
 // ===============================
 if (L.easyButton) {
     L.easyButton({
@@ -108,4 +108,31 @@ if (L.easyButton) {
         }]
     }).addTo(map);
 }
+
+// ===============================
+// WELCOME MODAL – BUTANG MASUK
+// ===============================
+document.addEventListener("DOMContentLoaded", function () {
+
+    var modal = document.getElementById("welcomeModal");
+    var btnMasuk = document.getElementById("btnMasuk");
+
+    // Papar popup sekali sahaja
+    if (!localStorage.getItem("welcomeShown")) {
+        modal.style.display = "flex";
+    } else {
+        modal.style.display = "none";
+    }
+
+    btnMasuk.addEventListener("click", function () {
+        modal.style.display = "none";
+        localStorage.setItem("welcomeShown", "true");
+
+        // Zoom automatik ke PUO selepas masuk
+        map.flyTo(puoLatLng, 18, {
+            animate: true,
+            duration: 1.2
+        });
+    });
+});
 
