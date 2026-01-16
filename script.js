@@ -1,9 +1,7 @@
 // ===============================
 // MATIKAN SEMUA MARKER LEAFLET
 // ===============================
-L.Marker.prototype.options.icon = L.divIcon({
-    className: 'no-marker'
-});
+L.Marker.prototype.options.icon = L.divIcon({ className: 'no-marker' });
 
 // ===============================
 // Koordinat Pusat PUO
@@ -17,7 +15,6 @@ var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '© OpenStreetMap Contributors',
     maxZoom: 22
 });
-
 var satellite = L.tileLayer('https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
     maxZoom: 22,
     subdomains: ['mt0','mt1','mt2','mt3'],
@@ -27,10 +24,7 @@ var satellite = L.tileLayer('https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}'
 // ===============================
 // Tentukan zoom awal ikut peranti
 // ===============================
-var initialZoom = 16; // desktop
-if (window.innerWidth <= 768) {
-    initialZoom = 17; // telefon
-}
+var initialZoom = window.innerWidth <= 768 ? 17 : 16;
 
 // ===============================
 // Initialize Map
@@ -49,10 +43,7 @@ var map = L.map('map', {
 // ===============================
 // Layer Switcher
 // ===============================
-var baseMaps = {
-    "OpenStreetMap": osm,
-    "Satelit": satellite
-};
+var baseMaps = { "OpenStreetMap": osm, "Satelit": satellite };
 L.control.layers(baseMaps, {}, { collapsed: false }).addTo(map);
 
 // ===============================
@@ -67,7 +58,7 @@ legend.onAdd = function () {
 legend.addTo(map);
 
 // ===============================
-// Measure & Scale (TIADA AUTO PAN)
+// Measure & Scale
 // ===============================
 L.control.measure({
     primaryLengthUnit: 'meters',
@@ -76,11 +67,10 @@ L.control.measure({
     completedColor: '#198754',
     popupOptions: { autoPan: false }
 }).addTo(map);
-
 L.control.scale().addTo(map);
 
 // ===============================
-// Search (TANPA MARKER)
+// Search
 // ===============================
 L.Control.geocoder({
     defaultMarkGeocode: false,
@@ -113,25 +103,16 @@ if (L.easyButton) {
 // WELCOME MODAL – BUTANG MASUK
 // ===============================
 document.addEventListener("DOMContentLoaded", function () {
-
     var modal = document.getElementById("welcomeModal");
     var btnMasuk = document.getElementById("btnMasuk");
 
-    // Papar popup sekali sahaja
-    if (!localStorage.getItem("welcomeShown")) {
-        modal.style.display = "flex";
-    } else {
-        modal.style.display = "none";
-    }
+    if (!localStorage.getItem("welcomeShown")) { modal.style.display = "flex"; }
+    else { modal.style.display = "none"; }
 
     btnMasuk.addEventListener("click", function () {
         modal.style.display = "none";
         localStorage.setItem("welcomeShown", "true");
-
-        // Zoom automatik ke PUO selepas masuk
-        map.flyTo(puoLatLng, 18, {
-            animate: true,
-            duration: 1.2
-        });
+        map.flyTo(puoLatLng, 18, { animate: true, duration: 1.2 });
     });
 });
+
