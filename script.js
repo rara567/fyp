@@ -1,15 +1,17 @@
 // ===============================
 // MATIKAN SEMUA MARKER LEAFLET
 // ===============================
-L.Marker.prototype.options.icon = L.divIcon({ className: 'no-marker' });
+L.Marker.prototype.options.icon = L.divIcon({
+    className: 'no-marker'
+});
 
 // ===============================
-// KOORDINAT PUO
+// Koordinat Pusat PUO
 // ===============================
 var puoLatLng = [4.5886, 101.1261];
 
 // ===============================
-// BASEMAP LAYERS
+// Basemap Layers
 // ===============================
 var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '© OpenStreetMap Contributors',
@@ -23,12 +25,15 @@ var satellite = L.tileLayer('https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}'
 });
 
 // ===============================
-// INITIAL ZOOM BERGANTUNG PERANTI
+// Tentukan zoom awal ikut peranti
 // ===============================
-var initialZoom = window.innerWidth <= 768 ? 17 : 16;
+var initialZoom = 16; // desktop
+if (window.innerWidth <= 768) {
+    initialZoom = 17; // telefon
+}
 
 // ===============================
-// INITIALIZE MAP
+// Initialize Map
 // ===============================
 var map = L.map('map', {
     center: puoLatLng,
@@ -42,13 +47,16 @@ var map = L.map('map', {
 });
 
 // ===============================
-// LAYER SWITCHER
+// Layer Switcher
 // ===============================
-var baseMaps = { "OpenStreetMap": osm, "Satelit": satellite };
+var baseMaps = {
+    "OpenStreetMap": osm,
+    "Satelit": satellite
+};
 L.control.layers(baseMaps, {}, { collapsed: false }).addTo(map);
 
 // ===============================
-// LEGEND
+// Legend
 // ===============================
 var legend = L.control({ position: 'bottomright' });
 legend.onAdd = function () {
@@ -59,7 +67,7 @@ legend.onAdd = function () {
 legend.addTo(map);
 
 // ===============================
-// MEASURE & SCALE
+// Measure & Scale (TIADA AUTO PAN)
 // ===============================
 L.control.measure({
     primaryLengthUnit: 'meters',
@@ -72,7 +80,7 @@ L.control.measure({
 L.control.scale().addTo(map);
 
 // ===============================
-// SEARCH
+// Search (TANPA MARKER)
 // ===============================
 L.Control.geocoder({
     defaultMarkGeocode: false,
@@ -82,7 +90,7 @@ L.Control.geocoder({
 }).addTo(map);
 
 // ===============================
-// EASY BUTTON – FOKUS PUO
+// Easy Button – Fokus PUO
 // ===============================
 if (L.easyButton) {
     L.easyButton({
@@ -105,11 +113,13 @@ if (L.easyButton) {
 // WELCOME MODAL – BUTANG MASUK
 // ===============================
 document.addEventListener("DOMContentLoaded", function () {
+
     var modal = document.getElementById("welcomeModal");
     var btnMasuk = document.getElementById("btnMasuk");
 
+    // Papar popup sekali sahaja
     if (!localStorage.getItem("welcomeShown")) {
-        modal.style.display = "flex"; // modal muncul sepenuhnya
+        modal.style.display = "flex";
     } else {
         modal.style.display = "none";
     }
@@ -117,7 +127,12 @@ document.addEventListener("DOMContentLoaded", function () {
     btnMasuk.addEventListener("click", function () {
         modal.style.display = "none";
         localStorage.setItem("welcomeShown", "true");
-        map.flyTo(puoLatLng, 18, { animate: true, duration: 1.2 });
+
+        // Zoom automatik ke PUO selepas masuk
+        map.flyTo(puoLatLng, 18, {
+            animate: true,
+            duration: 1.2
+        });
     });
 });
 
