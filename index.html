@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Laman Web Peta Politeknik Ungku Omar</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
@@ -22,27 +23,27 @@
 
 <body>
 
-  <!-- WELCOME MODAL -->
+  <!-- ===============================
+       WELCOME MODAL / POPUP
+  ================================ -->
   <div id="welcomeModal" class="modal-overlay">
     <div class="modal-box">
-      <img src="img/logo-puo.png" alt="PUO Logo" class="modal-logo">
-
       <h2>Selamat Datang!</h2>
-
       <p class="modal-text">
         PETA INTERAKTIF KAMPUS<br>
         POLITEKNIK UNGKU OMAR
       </p>
-
       <button id="btnMasuk">Masuk</button>
     </div>
   </div>
 
+  <!-- HEADER -->
   <header>
     <h1>PUO VIRTUAL CAMPUS</h1>
     <p>Web Information System (WIS)</p>
   </header>
 
+  <!-- MAP -->
   <div id="map"></div>
 
   <!-- Leaflet JS -->
