@@ -1,73 +1,4 @@
 /* ===============================
-   BODY & HEADER IMPROVEMENTS
-=============================== */
-body {
-  font-family: 'Arial', sans-serif;
-  margin: 0;
-  padding: 0;
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); /* Gradien latar belakang halus */
-  color: #333;
-  transition: background 0.3s ease; /* Untuk tema gelap */
-}
-
-.dark-theme {
-  background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
-  color: #ecf0f1;
-}
-
-header {
-  background: linear-gradient(135deg, #0b5ed7 0%, #084298 100%); /* Gradien header */
-  color: white;
-  padding: 20px;
-  text-align: center;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-  animation: headerSlideIn 0.8s ease;
-}
-
-header h1 {
-  font-size: 2.5em;
-  margin: 0;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-}
-
-header p {
-  font-size: 1.2em;
-  margin: 5px 0 0;
-}
-
-/* Animasi header */
-@keyframes headerSlideIn {
-  from { transform: translateY(-50px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
-}
-
-/* ===============================
-   MAP IMPROVEMENTS
-=============================== */
-#map {
-  height: calc(100vh - 100px); /* Tinggi penuh minus header */
-  border-radius: 10px;
-  margin: 10px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-}
-
-/* ===============================
-   LEGEND IMPROVEMENTS
-=============================== */
-.legend {
-  background: rgba(255, 255, 255, 0.9);
-  padding: 10px;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-  font-size: 14px;
-}
-
-.dark-theme .legend {
-  background: rgba(0, 0, 0, 0.8);
-  color: #ecf0f1;
-}
-
-/* ===============================
    WELCOME MODAL / POPUP
 =============================== */
 .modal-overlay {
@@ -81,24 +12,17 @@ header p {
   align-items: center;
   justify-content: center;
   z-index: 9999; /* paling atas */
-  backdrop-filter: blur(5px); /* Efek blur latar belakang */
 }
 
 .modal-box {
-  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  background: #ffffff;
   padding: 30px 25px;
   border-radius: 18px;
   text-align: center;
   width: 90%;
   max-width: 420px;
   box-shadow: 0 15px 40px rgba(0,0,0,0.35);
-  animation: modalFade 0.6s ease; /* Lebih lambat */
-  transform: scale(0.8); /* Mulai kecil */
-}
-
-.dark-theme .modal-box {
-  background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%);
-  color: #ecf0f1;
+  animation: modalFade 0.4s ease;
 }
 
 .modal-logo {
@@ -110,12 +34,6 @@ header p {
   margin: 10px 0;
   font-size: 24px;
   font-weight: bold;
-  color: #0b5ed7;
-  text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
-}
-
-.dark-theme .modal-box h2 {
-  color: #ecf0f1;
 }
 
 .modal-text {
@@ -123,10 +41,6 @@ header p {
   line-height: 1.6;
   margin-bottom: 25px;
   color: #000;
-}
-
-.dark-theme .modal-text {
-  color: #ecf0f1;
 }
 
 #btnMasuk {
@@ -137,25 +51,21 @@ header p {
   font-size: 16px;
   border-radius: 10px;
   cursor: pointer;
-  transition: all 0.3s ease; /* Efek hover halus */
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
 
 #btnMasuk:hover {
   background: #084298;
-  transform: translateY(-2px); /* Efek angkat */
-  box-shadow: 0 6px 12px rgba(0,0,0,0.3);
 }
 
 /* ANIMATION */
 @keyframes modalFade {
   from {
     opacity: 0;
-    transform: scale(0.8) rotate(-5deg);
+    transform: scale(0.9);
   }
   to {
     opacity: 1;
-    transform: scale(1) rotate(0deg);
+    transform: scale(1);
   }
 }
 
@@ -181,13 +91,5 @@ header p {
     font-size: 15px;
     padding: 10px 30px;
   }
-
-  header h1 {
-    font-size: 2em;
-  }
-
-  #map {
-    height: calc(100vh - 80px);
-    margin: 5px;
-  }
 }
+
