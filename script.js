@@ -110,41 +110,6 @@ if (L.easyButton) {
 }
 
 // ===============================
-// TAMBAHAN: MARKER LOKASI KAMPUS
-// ===============================
-var markerPUO = L.marker(puoLatLng).addTo(map);
-markerPUO.bindPopup("<b>Politeknik Ungku Omar</b><br>Kampus utama dengan fasilitas lengkap.").openPopup();
-
-// Tambahkan marker contoh lain (ganti dengan data real)
-var fakultiMarker = L.marker([4.5890, 101.1270]).addTo(map);
-fakultiMarker.bindPopup("<b>Fakulti Teknologi Maklumat</b><br>Tempat belajar IT dan programming.");
-
-// ===============================
-// TAMBAHAN: TOMBOL TEMA GELAP
-// ===============================
-L.easyButton({
-    id: 'btn-theme',
-    position: 'topright',
-    states: [{
-        stateName: 'light',
-        onClick: function(btn, map){
-            document.body.classList.toggle('dark-theme');
-            btn.state('dark');
-        },
-        title: 'Tukar Tema',
-        icon: '🌙'
-    }, {
-        stateName: 'dark',
-        onClick: function(btn, map){
-            document.body.classList.toggle('dark-theme');
-            btn.state('light');
-        },
-        title: 'Tukar Tema',
-        icon: '☀️'
-    }]
-}).addTo(map);
-
-// ===============================
 // WELCOME MODAL – BUTANG MASUK
 // ===============================
 document.addEventListener("DOMContentLoaded", function () {
@@ -163,16 +128,11 @@ document.addEventListener("DOMContentLoaded", function () {
         modal.style.display = "none";
         localStorage.setItem("welcomeShown", "true");
 
-        // Zoom automatik ke PUO selepas masuk (lebih dramatis)
+        // Zoom automatik ke PUO selepas masuk
         map.flyTo(puoLatLng, 18, {
             animate: true,
-            duration: 2.0, // Lebih lama
-            easeLinearity: 0.5 // Lebih smooth
+            duration: 1.2
         });
-
-        // Buka popup marker setelah zoom
-        setTimeout(() => {
-            markerPUO.openPopup();
-        }, 2000);
     });
 });
+
