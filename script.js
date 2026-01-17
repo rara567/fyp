@@ -108,14 +108,12 @@ document.addEventListener("DOMContentLoaded", function () {
     var modal = document.getElementById("welcomeModal");
     var btnMasuk = document.getElementById("btnMasuk");
 
-    // Papar modal hanya jika belum pernah buka
     if (!localStorage.getItem("welcomeShown")) {
-        modal.style.display = "flex"; // modal akan tetap muncul hingga klik Masuk
+        modal.style.display = "flex"; // modal muncul sepenuhnya
     } else {
         modal.style.display = "none";
     }
 
-    // Tutup modal bila klik Masuk
     btnMasuk.addEventListener("click", function () {
         modal.style.display = "none";
         localStorage.setItem("welcomeShown", "true");
