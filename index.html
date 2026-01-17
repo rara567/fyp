@@ -2,13 +2,18 @@
 <html lang="ms">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Laman Web Peta Politeknik Ungku Omar</title>
 
   <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
+  <!-- Measure Tool -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet-measure/dist/leaflet-measure.css">
+
+  <!-- Search -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css">
+
+  <!-- EasyButton -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet-easybutton@2.4.0/src/easy-button.css">
 
   <!-- Custom CSS -->
@@ -20,28 +25,36 @@
   <!-- WELCOME MODAL -->
   <div id="welcomeModal" class="modal-overlay">
     <div class="modal-box">
+      <img src="img/logo-puo.png" alt="PUO Logo" class="modal-logo">
+
       <h2>Selamat Datang!</h2>
+
       <p class="modal-text">
         PETA INTERAKTIF KAMPUS<br>
         POLITEKNIK UNGKU OMAR
       </p>
+
       <button id="btnMasuk">Masuk</button>
     </div>
   </div>
 
-  <!-- HEADER -->
   <header>
     <h1>PUO VIRTUAL CAMPUS</h1>
     <p>Web Information System (WIS)</p>
   </header>
 
-  <!-- MAP -->
   <div id="map"></div>
 
   <!-- Leaflet JS -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <!-- Measure Tool -->
   <script src="https://unpkg.com/leaflet-measure/dist/leaflet-measure.js"></script>
+
+  <!-- Search -->
   <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+
+  <!-- EasyButton -->
   <script src="https://unpkg.com/leaflet-easybutton@2.4.0/src/easy-button.js"></script>
 
   <!-- Custom JS -->
