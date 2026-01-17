@@ -4,17 +4,18 @@
 L.Marker.prototype.options.icon = L.divIcon({ className: 'no-marker' });
 
 // ===============================
-// Koordinat Pusat PUO
+// KOORDINAT PUO
 // ===============================
 var puoLatLng = [4.5886, 101.1261];
 
 // ===============================
-// Basemap Layers
+// BASEMAP LAYERS
 // ===============================
 var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '© OpenStreetMap Contributors',
     maxZoom: 22
 });
+
 var satellite = L.tileLayer('https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
     maxZoom: 22,
     subdomains: ['mt0','mt1','mt2','mt3'],
@@ -22,12 +23,12 @@ var satellite = L.tileLayer('https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}'
 });
 
 // ===============================
-// Tentukan zoom awal ikut peranti
+// INITIAL ZOOM BERGANTUNG PERANTI
 // ===============================
 var initialZoom = window.innerWidth <= 768 ? 17 : 16;
 
 // ===============================
-// Initialize Map
+// INITIALIZE MAP
 // ===============================
 var map = L.map('map', {
     center: puoLatLng,
@@ -41,13 +42,13 @@ var map = L.map('map', {
 });
 
 // ===============================
-// Layer Switcher
+// LAYER SWITCHER
 // ===============================
 var baseMaps = { "OpenStreetMap": osm, "Satelit": satellite };
 L.control.layers(baseMaps, {}, { collapsed: false }).addTo(map);
 
 // ===============================
-// Legend
+// LEGEND
 // ===============================
 var legend = L.control({ position: 'bottomright' });
 legend.onAdd = function () {
@@ -58,7 +59,7 @@ legend.onAdd = function () {
 legend.addTo(map);
 
 // ===============================
-// Measure & Scale
+// MEASURE & SCALE
 // ===============================
 L.control.measure({
     primaryLengthUnit: 'meters',
@@ -70,7 +71,7 @@ L.control.measure({
 L.control.scale().addTo(map);
 
 // ===============================
-// Search
+// SEARCH
 // ===============================
 L.Control.geocoder({
     defaultMarkGeocode: false,
@@ -80,7 +81,7 @@ L.Control.geocoder({
 }).addTo(map);
 
 // ===============================
-// Easy Button – Fokus PUO
+// EASY BUTTON – FOKUS PUO
 // ===============================
 if (L.easyButton) {
     L.easyButton({
@@ -106,8 +107,11 @@ document.addEventListener("DOMContentLoaded", function () {
     var modal = document.getElementById("welcomeModal");
     var btnMasuk = document.getElementById("btnMasuk");
 
-    if (!localStorage.getItem("welcomeShown")) { modal.style.display = "flex"; }
-    else { modal.style.display = "none"; }
+    if (!localStorage.getItem("welcomeShown")) {
+        modal.style.display = "flex";
+    } else {
+        modal.style.display = "none";
+    }
 
     btnMasuk.addEventListener("click", function () {
         modal.style.display = "none";
