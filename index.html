@@ -31,23 +31,24 @@
 
 <header>
   <button id="btnSidebar">☰</button>
-  <div>
+  <div class="header-text">
     <h1>PUO VIRTUAL CAMPUS</h1>
     <p>Web Information System (WIS)</p>
   </div>
 </header>
 
-<!-- SIDEBAR -->
-<div id="sidebar">
-  <h3>Menu</h3>
-  <ul>
-    <li onclick="focusPUO()">Fokus PUO</li>
-    <li onclick="changeBasemap('osm')">OpenStreetMap</li>
-    <li onclick="changeBasemap('sat')">Satelit</li>
-  </ul>
-</div>
+<div id="layout">
+  <aside id="sidebar">
+    <h3>Menu</h3>
+    <ul>
+      <li onclick="focusPUO()">📍 Fokus PUO</li>
+      <li onclick="changeBasemap('osm')">🗺 OpenStreetMap</li>
+      <li onclick="changeBasemap('sat')">🛰 Satelit</li>
+    </ul>
+  </aside>
 
-<div id="map"></div>
+  <main id="map"></main>
+</div>
 
 <!-- JS -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
