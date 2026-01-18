@@ -13,38 +13,49 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet-easybutton@2.4.0/src/easy-button.css">
 
-  <!-- Custom -->
   <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-  <!-- WELCOME MODAL -->
-  <div id="welcomeModal" class="modal-overlay">
-    <div class="modal-box">
-      <h2>Selamat Datang</h2>
-      <p class="modal-text">
-        PETA INTERAKTIF KAMPUS<br>
-        <strong>POLITEKNIK UNGKU OMAR</strong>
-      </p>
-      <button id="btnMasuk">Masuk Peta</button>
-    </div>
+<!-- WELCOME MODAL -->
+<div id="welcomeModal" class="modal-overlay">
+  <div class="modal-box">
+    <h2>Selamat Datang</h2>
+    <p class="modal-text">
+      PETA INTERAKTIF KAMPUS<br>
+      <strong>POLITEKNIK UNGKU OMAR</strong>
+    </p>
+    <button id="btnMasuk">Masuk Peta</button>
   </div>
+</div>
 
-  <header>
+<header>
+  <button id="btnSidebar">☰</button>
+  <div>
     <h1>PUO VIRTUAL CAMPUS</h1>
     <p>Web Information System (WIS)</p>
-  </header>
+  </div>
+</header>
 
-  <div id="map"></div>
+<!-- SIDEBAR -->
+<div id="sidebar">
+  <h3>Menu</h3>
+  <ul>
+    <li onclick="focusPUO()">Fokus PUO</li>
+    <li onclick="changeBasemap('osm')">OpenStreetMap</li>
+    <li onclick="changeBasemap('sat')">Satelit</li>
+  </ul>
+</div>
 
-  <!-- JS -->
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="https://unpkg.com/leaflet-measure/dist/leaflet-measure.js"></script>
-  <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
-  <script src="https://unpkg.com/leaflet-easybutton@2.4.0/src/easy-button.js"></script>
+<div id="map"></div>
 
-  <script src="script.js"></script>
+<!-- JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet-measure/dist/leaflet-measure.js"></script>
+<script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+<script src="https://unpkg.com/leaflet-easybutton@2.4.0/src/easy-button.js"></script>
+
+<script src="script.js"></script>
 </body>
 </html>
 
