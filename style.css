@@ -9,52 +9,45 @@ html, body {
 header {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 16px;
+  padding: 16px 20px;
   background: linear-gradient(135deg, #0b5ed7, #198754);
-  color: #fff;
-  padding: 10px 14px;
-}
-
-header h1 {
-  margin: 0;
-  font-size: 20px;
-}
-
-header p {
-  margin: 2px 0 0;
-  font-size: 12px;
+  color: white;
 }
 
 #btnSidebar {
-  font-size: 22px;
+  font-size: 24px;
   background: none;
   border: none;
-  color: #fff;
+  color: white;
   cursor: pointer;
 }
 
-/* MAP */
-#map {
+.header-text h1 {
+  margin: 0;
+  font-size: 22px;
+}
+
+.header-text p {
+  margin: 4px 0 0;
+  font-size: 13px;
+}
+
+/* LAYOUT */
+#layout {
+  display: flex;
+  flex-direction: row;              /* ⭐ DESKTOP FIX */
+  height: calc(100vh - 88px);
   width: 100%;
-  height: calc(100vh - 72px);
 }
 
 /* SIDEBAR */
 #sidebar {
-  position: fixed;
-  top: 72px;
-  left: -260px;
   width: 260px;
-  height: calc(100vh - 72px);
+  flex-shrink: 0;                   /* ⭐ HALANG TURUN BARIS */
   background: #ffffff;
-  box-shadow: 2px 0 10px rgba(0,0,0,.2);
-  padding: 15px;
-  transition: 0.3s;
-  z-index: 2000;
-}
-
-#sidebar.active {
-  left: 0;
+  padding: 16px;
+  border-right: 1px solid #ddd;
 }
 
 #sidebar h3 {
@@ -68,7 +61,7 @@ header p {
 
 #sidebar li {
   padding: 10px;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
   background: #f1f3f5;
   border-radius: 8px;
   cursor: pointer;
@@ -76,6 +69,12 @@ header p {
 
 #sidebar li:hover {
   background: #e2e6ea;
+}
+
+/* MAP */
+#map {
+  flex: 1;                          /* ⭐ ISI RUANG KANAN */
+  height: 100%;
 }
 
 /* MODAL */
@@ -91,11 +90,11 @@ header p {
 
 .modal-box {
   background: #fff;
-  padding: 26px;
+  padding: 28px;
   border-radius: 16px;
-  text-align: center;
   width: 90%;
   max-width: 420px;
+  text-align: center;
 }
 
 .modal-text {
@@ -104,17 +103,32 @@ header p {
 
 #btnMasuk {
   background: #0b5ed7;
-  color: #fff;
+  color: white;
   border: none;
   padding: 10px 30px;
   border-radius: 8px;
   cursor: pointer;
 }
 
-/* MOBILE */
+/* =======================
+   MOBILE MODE
+======================= */
 @media (max-width: 768px) {
+
+  #layout {
+    flex-direction: column;
+  }
+
   #sidebar {
-    width: 220px;
+    position: fixed;
+    top: 88px;
+    left: -260px;
+    height: calc(100vh - 88px);
+    z-index: 2000;
+    transition: 0.3s;
+  }
+
+  #sidebar.active {
+    left: 0;
   }
 }
-
