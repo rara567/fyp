@@ -1,8 +1,142 @@
 {
-"type": "FeatureCollection",
-"name": "buildings",
-"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:EPSG::3375" } },
-"features": [
-{ "type": "Feature", "properties": { "luas": 123.33, "id": 1 }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 348017.988281223922968, 507733.509470202494413 ], [ 348034.513021672959439, 507679.308321529766545 ], [ 348005.925499399600085, 507670.592613519576844 ], [ 347989.400758950563613, 507724.793762192304712 ], [ 348017.988281223922968, 507733.509470202494413 ] ] ] ] } }
-]
+  "type": "FeatureCollection",
+  "features": [
+
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Perpustakaan PUO"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [101.12645, 4.58905],
+          [101.12665, 4.58905],
+          [101.12665, 4.58925],
+          [101.12645, 4.58925],
+          [101.12645, 4.58905]
+        ]]
+      }
+    },
+
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Jabatan Teknologi Maklumat (JTM)"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [101.12685, 4.58885],
+          [101.12705, 4.58885],
+          [101.12705, 4.58905],
+          [101.12685, 4.58905],
+          [101.12685, 4.58885]
+        ]]
+      }
+    },
+
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Jabatan Kejuruteraan Awam (JKA)"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [101.12720, 4.58895],
+          [101.12740, 4.58895],
+          [101.12740, 4.58915],
+          [101.12720, 4.58915],
+          [101.12720, 4.58895]
+        ]]
+      }
+    },
+
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Jabatan Kejuruteraan Elektrik (JKE)"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [101.12660, 4.58860],
+          [101.12680, 4.58860],
+          [101.12680, 4.58880],
+          [101.12660, 4.58880],
+          [101.12660, 4.58860]
+        ]]
+      }
+    },
+
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Dewan Serbaguna"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [101.12610, 4.58870],
+          [101.12630, 4.58870],
+          [101.12630, 4.58890],
+          [101.12610, 4.58890],
+          [101.12610, 4.58870]
+        ]]
+      }
+    },
+
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Kafeteria PUO"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [101.12590, 4.58850],
+          [101.12610, 4.58850],
+          [101.12610, 4.58870],
+          [101.12590, 4.58870],
+          [101.12590, 4.58850]
+        ]]
+      }
+    },
+
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Surau PUO"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [101.12570, 4.58885],
+          [101.12590, 4.58885],
+          [101.12590, 4.58905],
+          [101.12570, 4.58905],
+          [101.12570, 4.58885]
+        ]]
+      }
+    },
+
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Pejabat Pentadbiran"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [101.12620, 4.58940],
+          [101.12640, 4.58940],
+          [101.12640, 4.58960],
+          [101.12620, 4.58960],
+          [101.12620, 4.58940]
+        ]]
+      }
+    }
+
+  ]
 }
