@@ -1,144 +1,119 @@
-// ===============================
-// MATIKAN MARKER DEFAULT
-// ===============================
 L.Marker.prototype.options.icon = L.divIcon({ className: 'no-marker' });
 
-// ===============================
-// KOORDINAT PUO
-// ===============================
 var puoLatLng = [4.5886, 101.1261];
 
-// ===============================
-// BASEMAPS
-// ===============================
 var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 22 });
 var satellite = L.tileLayer(
   'https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',
   { maxZoom: 22, subdomains: ['mt0','mt1','mt2','mt3'] }
 );
 
-// ===============================
-// INIT MAP
-// ===============================
 var map = L.map('map', {
   center: puoLatLng,
-  zoom: window.innerWidth <= 768 ? 17 : 16,
+  zoom: 17,
   layers: [osm]
 });
 
-// ===============================
-// PLUGINS
-// ===============================
 L.control.scale().addTo(map);
 
 L.control.measure({
   primaryLengthUnit: 'meters',
-  secondaryLengthUnit: 'kilometers',
-  popupOptions: { autoPan: false }
+  secondaryLengthUnit: 'kilometers'
 }).addTo(map);
 
-L.Control.geocoder({
-  defaultMarkGeocode: false
-})
-.on('markgeocode', function(e){
-  map.flyTo(e.geocode.center, 17);
-})
-.addTo(map);
+L.easyButton('📍', () => map.flyTo(puoLatLng, 18)).addTo(map);
 
-// ===============================
-// EASY BUTTON
-// ===============================
-L.easyButton({
-  position: 'topright',
-  states: [{
-    icon: '<b>PUO</b>',
-    title: 'Fokus PUO',
-    onClick: function () {
-      map.flyTo(puoLatLng, 18);
-    }
-  }]
-}).addTo(map);
-
-// ===============================
-// SIDEBAR TOGGLE
-// ===============================
 var btnSidebar = document.getElementById("btnSidebar");
 var sidebar = document.getElementById("sidebar");
-
-btnSidebar.onclick = function () {
+btnSidebar.onclick = () => {
   sidebar.classList.toggle("active");
   setTimeout(() => map.invalidateSize(), 300);
 };
 
-// ===============================
-// FUNCTIONS UTAMA
-// ===============================
 function focusPUO() {
   map.flyTo(puoLatLng, 18);
 }
 
 function changeBasemap(type) {
-  map.eachLayer(function(layer){
-    if (layer === osm || layer === satellite) map.removeLayer(layer);
-  });
+  map.eachLayer(l => { if (l === osm || l === satellite) map.removeLayer(l); });
   (type === 'sat' ? satellite : osm).addTo(map);
 }
 
-// ===============================
-// MODAL WELCOME
-// ===============================
-document.addEventListener("DOMContentLoaded", function () {
-  var modal = document.getElementById("welcomeModal");
-  var btn = document.getElementById("btnMasuk");
+// ===== USER LOCATION =====
+var userLatLng = null;
+var userMarker = null;
 
-  if (!localStorage.getItem("welcomeShown")) {
-    modal.style.display = "flex";
-  }
-
-  btn.onclick = function () {
-    modal.style.display = "none";
-    localStorage.setItem("welcomeShown", "true");
-    setTimeout(() => map.invalidateSize(), 300);
-  };
+map.locate({ setView: false });
+map.on('locationfound', e => {
+  userLatLng = e.latlng;
+  userMarker = L.circleMarker(userLatLng, {
+    radius: 8,
+    color: "#0d6efd",
+    fillOpacity: 1
+  }).addTo(map).bindPopup("Lokasi Anda");
 });
 
-// ===============================
-// FIX SAIZ MAP DESKTOP
-// ===============================
-window.addEventListener("load", () => {
-  map.invalidateSize();
-});
+// ===== ROUTING =====
+var routingControl = null;
+function navigateToBuilding(dest, name) {
+  if (!userLatLng) return alert("Lokasi pengguna belum dikesan");
 
-// ===============================
-// GEOJSON BUILDINGS (DARI QGIS)
-// ===============================
-function buildingStyle(feature) {
-  return {
-    color: "#0b5ed7",
-    weight: 2,
-    fillColor: "#198754",
-    fillOpacity: 0.55
-  };
+  if (routingControl) map.removeControl(routingControl);
+
+  routingControl = L.Routing.control({
+    waypoints: [userLatLng, dest],
+    router: L.Routing.osrmv1({
+      serviceUrl: 'https://router.project-osrm.org/route/v1'
+    }),
+    addWaypoints: false,
+    draggableWaypoints: false,
+    fitSelectedRoutes: true
+  }).addTo(map);
 }
 
-function onEachBuilding(feature, layer) {
-  if (feature.properties && feature.properties.name) {
-    layer.bindPopup(
-      `<strong>Bangunan:</strong> ${feature.properties.name}`
-    );
-  }
-}
+// ===== LOAD BUILDINGS =====
+var buildingIndex = [];
 
-// LOAD GEOJSON
 fetch("data/buildings.geojson")
   .then(res => res.json())
   .then(data => {
-    var buildingLayer = L.geoJSON(data, {
-      style: buildingStyle,
-      onEachFeature: onEachBuilding
-    }).addTo(map);
+    L.geoJSON(data, {
+      style: { color:"#0b5ed7", fillColor:"#198754", fillOpacity:0.55 },
+      onEachFeature: (f, l) => {
+        var c = l.getBounds().getCenter();
+        buildingIndex.push({ name: f.properties.name.toLowerCase(), latlng: c });
 
-    // Zoom ke semua bangunan
-    map.fitBounds(buildingLayer.getBounds());
-  })
-  .catch(err => console.error("Gagal load GeoJSON:", err));
+        l.bindPopup(`
+          <strong>${f.properties.name}</strong><br>
+          <button class="popup-btn"
+            onclick="navigateToBuilding(L.latLng(${c.lat},${c.lng}),'${f.properties.name}')">
+            🚶 Arah ke sini
+          </button>
+        `);
+      }
+    }).addTo(map);
+  });
+
+// ===== SEARCH =====
+document.getElementById("searchBox").addEventListener("keyup", e => {
+  if (e.key === "Enter") {
+    var q = e.target.value.toLowerCase();
+    var b = buildingIndex.find(x => x.name.includes(q));
+    if (b) {
+      map.flyTo(b.latlng, 18);
+      navigateToBuilding(b.latlng, q);
+    } else alert("Bangunan tidak ditemui");
+  }
+});
+
+// ===== MODAL =====
+document.addEventListener("DOMContentLoaded", () => {
+  var modal = document.getElementById("welcomeModal");
+  var btn = document.getElementById("btnMasuk");
+  if (!localStorage.getItem("welcomeShown")) modal.style.display = "flex";
+  btn.onclick = () => {
+    modal.style.display = "none";
+    localStorage.setItem("welcomeShown", "true");
+  };
+});
+
