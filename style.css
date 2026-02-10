@@ -5,7 +5,6 @@ html, body {
   font-family: "Segoe UI", Arial, sans-serif;
 }
 
-/* HEADER */
 header {
   display: flex;
   align-items: center;
@@ -33,25 +32,24 @@ header {
   font-size: 13px;
 }
 
-/* LAYOUT */
 #layout {
   display: flex;
-  flex-direction: row;              /* ⭐ DESKTOP FIX */
   height: calc(100vh - 88px);
-  width: 100%;
 }
 
-/* SIDEBAR */
 #sidebar {
   width: 260px;
-  flex-shrink: 0;                   /* ⭐ HALANG TURUN BARIS */
-  background: #ffffff;
+  background: white;
   padding: 16px;
   border-right: 1px solid #ddd;
 }
 
-#sidebar h3 {
-  margin-top: 0;
+#searchBox {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
 }
 
 #sidebar ul {
@@ -67,17 +65,10 @@ header {
   cursor: pointer;
 }
 
-#sidebar li:hover {
-  background: #e2e6ea;
-}
-
-/* MAP */
 #map {
-  flex: 1;                          /* ⭐ ISI RUANG KANAN */
-  height: 100%;
+  flex: 1;
 }
 
-/* MODAL */
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -97,10 +88,6 @@ header {
   text-align: center;
 }
 
-.modal-text {
-  margin-bottom: 20px;
-}
-
 #btnMasuk {
   background: #0b5ed7;
   color: white;
@@ -110,11 +97,17 @@ header {
   cursor: pointer;
 }
 
-/* =======================
-   MOBILE MODE
-======================= */
-@media (max-width: 768px) {
+.popup-btn {
+  margin-top: 8px;
+  padding: 6px 12px;
+  background: #0b5ed7;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
 
+@media (max-width: 768px) {
   #layout {
     flex-direction: column;
   }
@@ -124,11 +117,12 @@ header {
     top: 88px;
     left: -260px;
     height: calc(100vh - 88px);
-    z-index: 2000;
     transition: 0.3s;
+    z-index: 2000;
   }
 
   #sidebar.active {
     left: 0;
   }
 }
+
